@@ -11,7 +11,7 @@
   --stripe-red:#C0392B; --stripe-navy:#21303f;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+
 body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--cream);line-height:1.65}
 
 /* Type system */
@@ -100,21 +100,18 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 
 /* Airmail panel */
 .airmail-wrap{background:var(--cream);padding-top:20px}
-.airmail{max-width:1040px;margin:0 auto;background:#fff;border-radius:18px;padding:54px 48px;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center;
-  border:14px solid transparent;
-  border-image:repeating-linear-gradient(45deg,var(--stripe-red) 0 18px,#fff 18px 30px,var(--stripe-navy) 30px 48px,#fff 48px 60px) 14;
-  box-shadow:0 16px 38px rgba(33,48,63,.12)}
+.airmail{max-width:1040px;margin:0 auto;border-radius:18px;padding:14px;background:repeating-linear-gradient(45deg,var(--stripe-red) 0 18px,#fff 18px 30px,var(--stripe-navy) 30px 48px,#fff 48px 60px);box-shadow:0 16px 38px rgba(33,48,63,.12)}
+.airmail-in{background:#fff;border-radius:8px;padding:44px 40px;display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center}
 .airmail-media{position:relative;min-height:260px}
 .mail-big{position:relative;width:100%;max-width:340px;margin:0 auto;transform:rotate(-3deg)}
 .airmail-copy p{color:var(--grey);margin-bottom:16px}
 .airmail-copy .button{margin-top:8px}
-@media(max-width:860px){.airmail{grid-template-columns:1fr;padding:40px 26px}}
+@media(max-width:860px){.airmail-in{grid-template-columns:1fr;padding:32px 22px}}
 
 /* Steps : torn-paper cards */
 .steps-wrap{background:var(--cream)}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:26px;margin-top:46px}
-.paper{background:var(--paper);padding:34px 28px 30px;position:relative;
-  clip-path:polygon(0 12px,4% 0,9% 12px,14% 2px,19% 12px,24% 0,29% 12px,34% 3px,39% 12px,44% 0,49% 12px,54% 2px,59% 12px,64% 0,69% 12px,74% 3px,79% 12px,84% 0,89% 12px,94% 2px,100% 12px,100% 100%,0 100%)}
+.paper{background:var(--paper);padding:34px 28px 30px;position:relative;border-radius:14px;border-top:4px dashed #d8c9ae;box-shadow:0 8px 20px rgba(33,48,63,.08)}
 .step-tag{font-weight:700;font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:10px}
 .paper h3{margin-bottom:10px}
 .paper p{color:var(--grey);font-size:.95rem}
