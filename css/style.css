@@ -57,7 +57,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .star-4{top:10%;left:8%}.star-5{bottom:14%;right:9%;font-size:2.8rem}.star-6{top:14%;right:10%}
 
 /* Hero */
-.hero{position:relative;background:var(--red);background-image:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2px);background-size:46px 46px;color:#fff;text-align:center;padding:72px 24px 220px;overflow:hidden}
+.hero{position:relative;background:var(--red);color:#fff;text-align:center;padding:72px 24px 220px;overflow:hidden}
 .hero-inner{max-width:880px;margin:0 auto;position:relative}
 .eyebrow{font-weight:700;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:#FFD9C9;margin-bottom:18px}
 .hero h1 .h-caps{font-size:clamp(2.4rem,6.5vw,4.6rem)}
@@ -122,10 +122,10 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .paper-wide .h-caps{font-size:clamp(1.3rem,3vw,2rem);color:var(--navy)}
 
 /* Calendar */
-.calendar{background:#fff}
+.calendar{background:var(--cream)}
 .calendar-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;margin-top:46px}
-.touchpoint{background:var(--cream);border-radius:14px;padding:24px;border:1px solid #ecdfc8}
-.touchpoint-when{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--gold);padding:4px 10px;border-radius:12px;margin-bottom:12px}
+.touchpoint{background:#fff;border-radius:14px;padding:24px;border:1px solid #e7dbc6;box-shadow:0 4px 12px rgba(33,48,63,.06)}
+.touchpoint-when{display:inline-block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:var(--navy);padding:4px 10px;border-radius:12px;margin-bottom:12px}
 .touchpoint h3{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;font-size:1.02rem;margin-bottom:6px}
 .touchpoint p{color:var(--grey);font-size:.9rem}
 .touchpoint-signature{background:var(--navy);border-color:var(--navy)}
@@ -133,7 +133,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .touchpoint-signature p{color:#b8c4cf}
 
 /* ROI */
-.roi{background:var(--navy);background-image:radial-gradient(rgba(255,255,255,.06) 2px,transparent 2px);background-size:42px 42px;color:#fff;text-align:center;overflow:hidden}
+.roi{background:var(--navy);color:#fff;text-align:center;overflow:hidden}
 .roi .stacked-head .h-caps{color:#fff}
 .roi-compare{display:flex;align-items:center;justify-content:center;gap:34px;flex-wrap:wrap;margin:40px 0 26px}
 .roi-figure{font-family:'Anton',sans-serif;font-size:clamp(2.4rem,6vw,3.8rem);color:var(--gold)}
@@ -162,7 +162,7 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .faq details p{margin-top:10px;color:var(--grey);font-size:.95rem}
 
 /* Final CTA */
-.final-cta{background:var(--red);background-image:radial-gradient(rgba(255,255,255,.08) 2px,transparent 2px);background-size:46px 46px;color:#fff;text-align:center;overflow:hidden}
+.final-cta{background:var(--red);color:#fff;text-align:center;overflow:hidden}
 .final-cta .stacked-head .h-caps{color:#fff;font-size:clamp(1.5rem,3.4vw,2.4rem)}
 .final-cta .stacked-head .h-script{color:#FFE3B3}
 .final-cta .hero-note{color:#fbd9d2}
@@ -199,14 +199,15 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .gift-strip p{color:var(--grey);font-size:.95rem}
 .gift-strip strong{color:var(--navy)}
 
-/* Reveal animation */
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
-.reveal.visible{opacity:1;transform:translateY(0) rotate(0)}
-.reveal.visible.tilt-l{transform:rotate(-3deg)}
-.reveal.visible.tilt-r{transform:rotate(2.5deg)}
-.reveal.visible.tilt-l2{transform:rotate(-1.5deg)}
+/* Animations disabled for performance */
+.reveal{opacity:1}
+/* Family & Friends */
+.family{background:#fff}
+.center-lead{margin:0 auto;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:28px 0 6px}
+.chips span{background:var(--cream);border:1px solid #e7dbc6;padding:9px 16px;border-radius:20px;font-size:.88rem}
+.plans-4{max-width:1180px;grid-template-columns:repeat(auto-fit,minmax(235px,1fr))}
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto}
-  .reveal{opacity:1;transform:none;transition:none}
   .button:hover{transform:none}
 }
