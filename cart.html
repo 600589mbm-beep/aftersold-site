@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Cart — AfterSold</title>
+  <meta name="description" content="Complete your AfterSold order — cards and personalized letters, signed from you, mailed automatically.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .cart-wrap{max-width:1000px;margin:0 auto;padding:40px 24px 90px}
+    .cart-head{text-align:center;margin-bottom:36px}
+    .cart-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:start}
+    @media(max-width:820px){.cart-grid{grid-template-columns:1fr}}
+    .cart-card{background:#fff;border-radius:18px;padding:34px 30px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
+    .cart-plan-name{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.4rem;letter-spacing:.03em}
+    .cart-price{font-family:'Anton',sans-serif;font-size:3rem;color:var(--navy);margin:6px 0 4px}
+    .cart-price span{font-size:1rem;color:var(--grey);font-family:'Inter',sans-serif}
+    .cart-feats{list-style:none;margin:18px 0 6px}
+    .cart-feats li{padding:9px 0;border-bottom:1px solid #f1ece2;color:var(--grey);font-size:.95rem}
+    .cart-feats li::before{content:"✓  ";color:var(--red);font-weight:700}
+    .switch-label{font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);display:block;margin:22px 0 8px}
+    select#planSwitch{width:100%;padding:12px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.95rem;background:var(--cream);color:var(--ink)}
+    .total-row{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--navy);margin-top:18px;padding-top:16px}
+    .total-row .lbl{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em}
+    .total-row .amt{font-family:'Anton',sans-serif;font-size:1.7rem;color:var(--red)}
+    .checkout-btn{display:block;text-align:center;margin-top:20px;font-size:1.15rem;padding:18px 20px}
+    .trust{margin-top:22px}
+    .trust p{display:flex;gap:10px;color:var(--grey);font-size:.9rem;padding:7px 0;margin:0}
+    .guarantee-mini{background:var(--cream);border:2px dashed var(--gold);border-radius:14px;padding:18px 20px;margin-top:24px}
+    .guarantee-mini strong{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--navy)}
+    .guarantee-mini p{color:var(--grey);font-size:.9rem;margin-top:6px}
+    .next-steps{margin-top:26px}
+    .next-steps h3{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1rem;letter-spacing:.05em;margin-bottom:10px}
+    .next-steps ol{margin-left:18px;color:var(--grey);font-size:.92rem}
+    .next-steps li{padding:5px 0}
+    .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}
+    .back-link:hover{color:var(--red)}
+  </style>
+</head>
+<body>
+  <div class="announce">✦ <strong>SECURE CHECKOUT.</strong> MONTH TO MONTH — CANCEL ANYTIME. ✦</div>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="26" height="26" focusable="false" aria-hidden="true"><rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/><path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/></svg>
+        </span>
+        AfterSold
+      </a>
+      <a class="back-link" href="index.html" style="margin-left:auto">← Keep browsing</a>
+    </nav>
+  </header>
+
+  <main class="cart-wrap">
+    <div class="cart-head">
+      <h1 class="stacked-head center"><span class="h-caps">You're one step away</span><span class="h-script">from never being forgotten</span></h1>
+    </div>
+
+    <div class="cart-grid">
+      <!-- Order summary -->
+      <section class="cart-card" aria-label="Order summary">
+        <p class="plan-badge" id="planBadge" style="position:static;display:inline-block;transform:none;margin-bottom:14px">Your Plan</p>
+        <p class="cart-plan-name" id="planName">—</p>
+        <p class="cart-price" id="planPrice">—</p>
+        <ul class="cart-feats" id="planFeats"></ul>
+        <label class="switch-label" for="planSwitch">Change plan</label>
+        <select id="planSwitch" aria-label="Change plan"></select>
+        <div class="guarantee-mini">
+          <strong>🛡️ Love-It Guarantee</strong>
+          <p>If your first mailing doesn't make you smile, reply to your receipt and we'll refund the month. No contract — cancel anytime, in one email.</p>
+        </div>
+      </section>
+
+      <!-- Checkout -->
+      <section class="cart-card" aria-label="Checkout">
+        <div class="total-row"><span class="lbl">Total today</span><span class="amt" id="totalAmt">—</span></div>
+        <!-- TODO: replace each plan's "link" in the PLANS object below with your real Stripe Payment Link -->
+        <a class="button button-primary checkout-btn" id="checkoutBtn" href="#">Proceed to Secure Checkout →</a>
+        <div class="trust">
+          <p>🔒 256-bit encrypted checkout powered by Stripe</p>
+          <p>📆 Month-to-month billing — cancel anytime</p>
+          <p>✍️ Every piece signed from you, never from us</p>
+          <p>📬 First mailing scheduled within 7 days</p>
+        </div>
+        <div class="next-steps">
+          <h3>What happens after checkout</h3>
+          <ol>
+            <li>You get a 2-minute form to build your list — names, addresses, big dates.</li>
+            <li>Pick categories for each person (birthdays, holidays, heritage…).</li>
+            <li>We write, sign, and mail. You get a recap of every piece sent.</li>
+          </ol>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 AfterSold. All rights reserved.</p>
+      <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    // TODO: replace every "link" below with your real Stripe Payment Link
+    var PLANS = {
+      "one-month":      {name:"One a Month",      price:"$12",  per:"/mo", total:"$12/mo",  badge:"Family Plan", link:"#ADD-STRIPE-LINK-one-month",
+        feats:["1 card or letter every month","Any category, any person","Signed from you"]},
+      "three-month":    {name:"Three a Month",    price:"$29",  per:"/mo", total:"$29/mo",  badge:"Most Loved", link:"#ADD-STRIPE-LINK-three-month",
+        feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"]},
+      "ten-month":      {name:"Ten a Month",      price:"$79",  per:"/mo", total:"$79/mo",  badge:"Family Plan", link:"#ADD-STRIPE-LINK-ten-month",
+        feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"]},
+      "whole-family":   {name:"The Whole Family", price:"$129", per:"/mo", total:"$129/mo", badge:"Family Plan", link:"#ADD-STRIPE-LINK-whole-family",
+        feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"]},
+      "year":           {name:"The Year Plan",    price:"$119", per:"/yr", total:"$119/yr", badge:"Best Value", link:"#ADD-STRIPE-LINK-year",
+        feats:["Every birthday & anniversary covered for a full year","Up to 12 big days, scheduled once","Never forget that big day again"]},
+      "keep-in-touch":  {name:"Keep In Touch",    price:"$99",  per:"/mo", total:"$99/mo",  badge:"Business Plan", link:"#ADD-STRIPE-LINK-keep-in-touch",
+        feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"]},
+      "never-forgotten":{name:"Never Forgotten",  price:"$179", per:"/mo", total:"$179/mo", badge:"Most Popular", link:"#ADD-STRIPE-LINK-never-forgotten",
+        feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"]},
+      "letters":        {name:"AfterSold Letters",price:"$249", per:"/mo", total:"$249/mo", badge:"Business Plan", link:"#ADD-STRIPE-LINK-letters",
+        feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"]}
+    };
+    var sel = document.getElementById('planSwitch');
+    Object.keys(PLANS).forEach(function(k){
+      var o=document.createElement('option'); o.value=k; o.textContent=PLANS[k].name+" — "+PLANS[k].total; sel.appendChild(o);
+    });
+    function render(id){
+      var p = PLANS[id] || PLANS["three-month"];
+      if(!PLANS[id]) id = "three-month";
+      document.getElementById('planName').textContent = p.name;
+      document.getElementById('planBadge').textContent = p.badge;
+      document.getElementById('planPrice').innerHTML = p.price+'<span>'+p.per+'</span>';
+      document.getElementById('totalAmt').textContent = p.total;
+      document.getElementById('checkoutBtn').setAttribute('href', p.link);
+      var ul = document.getElementById('planFeats'); ul.innerHTML='';
+      p.feats.forEach(function(f){var li=document.createElement('li');li.textContent=f;ul.appendChild(li);});
+      sel.value = id;
+      try{history.replaceState(null,'','cart.html?plan='+id);}catch(e){}
+    }
+    sel.addEventListener('change', function(){render(this.value);});
+    render(new URLSearchParams(location.search).get('plan'));
+  })();
+  </script>
+</body>
+</html>
