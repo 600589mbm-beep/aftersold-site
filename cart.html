@@ -128,8 +128,11 @@
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"]}
     };
     var sel = document.getElementById('planSwitch');
-    Object.keys(PLANS).forEach(function(k){
-      var o=document.createElement('option'); o.value=k; o.textContent=PLANS[k].name+" — "+PLANS[k].total; sel.appendChild(o);
+    var GROUPS = [["👪 For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],["💼 For Business (Realtors & Dealers)",["keep-in-touch","never-forgotten","letters"]]];
+    GROUPS.forEach(function(g){
+      var og=document.createElement('optgroup'); og.label=g[0];
+      g[1].forEach(function(k){var o=document.createElement('option'); o.value=k; o.textContent=PLANS[k].name+" — "+PLANS[k].total; og.appendChild(o);});
+      sel.appendChild(og);
     });
     function render(id){
       var p = PLANS[id] || PLANS["three-month"];
