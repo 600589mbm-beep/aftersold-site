@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Your Cart — AfterSold</title>
-  <meta name="description" content="Complete your AfterSold order — cards and personalized letters, signed from you, mailed automatically.">
+  <title>Secure Checkout — AfterSold</title>
+  <meta name="description" content="Complete your AfterSold order — cards and personalized letters, signed from you, mailed automatically. Month to month, cancel anytime.">
   <meta name="robots" content="noindex">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,34 +12,90 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .cart-wrap{max-width:1000px;margin:0 auto;padding:40px 24px 90px}
-    .cart-head{text-align:center;margin-bottom:36px}
-    .cart-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:30px;align-items:start}
-    @media(max-width:820px){.cart-grid{grid-template-columns:1fr}}
-    .cart-card{background:#fff;border-radius:18px;padding:34px 30px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
-    .cart-plan-name{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.4rem;letter-spacing:.03em}
-    .cart-price{font-family:'Anton',sans-serif;font-size:3rem;color:var(--navy);margin:6px 0 4px}
+    .cart-wrap{max-width:1060px;margin:0 auto;padding:30px 22px 120px}
+    .cart-head{text-align:center;margin-bottom:10px}
+    .steps-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 auto 30px;max-width:520px;color:var(--grey);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .steps-bar .st{display:flex;align-items:center;gap:8px}
+    .steps-bar .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e7dbc6;color:var(--navy);font-family:'Anton',sans-serif}
+    .steps-bar .st.active .dot{background:var(--red);color:#fff}
+    .steps-bar .st.active{color:var(--navy)}
+    .steps-bar .bar{flex:1;height:2px;background:#e7dbc6;min-width:22px}
+    .cart-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:28px;align-items:start}
+    @media(max-width:860px){.cart-grid{grid-template-columns:1fr}}
+    .cart-card{background:#fff;border-radius:18px;padding:30px 28px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
+    .card-title{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;font-size:1.05rem;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:9px}
+    .cart-plan-name{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1.45rem;letter-spacing:.03em;color:var(--navy)}
+    .cart-price{font-family:'Anton',sans-serif;font-size:3rem;color:var(--navy);margin:4px 0 2px;line-height:1}
     .cart-price span{font-size:1rem;color:var(--grey);font-family:'Inter',sans-serif}
-    .cart-feats{list-style:none;margin:18px 0 6px}
-    .cart-feats li{padding:9px 0;border-bottom:1px solid #f1ece2;color:var(--grey);font-size:.95rem}
+    .cart-feats{list-style:none;margin:16px 0 4px}
+    .cart-feats li{padding:8px 0;border-bottom:1px solid #f1ece2;color:var(--grey);font-size:.93rem}
     .cart-feats li::before{content:"✓  ";color:var(--red);font-weight:700}
-    .switch-label{font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);display:block;margin:22px 0 8px}
+    .switch-label{font-weight:700;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--grey);display:block;margin:20px 0 8px}
     select#planSwitch{width:100%;padding:12px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.95rem;background:var(--cream);color:var(--ink)}
-    .total-row{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--navy);margin-top:18px;padding-top:16px}
-    .total-row .lbl{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em}
-    .total-row .amt{font-family:'Anton',sans-serif;font-size:1.7rem;color:var(--red)}
-    .checkout-btn{display:block;text-align:center;margin-top:20px;font-size:1.15rem;padding:18px 20px}
-    .trust{margin-top:22px}
-    .trust p{display:flex;gap:10px;color:var(--grey);font-size:.9rem;padding:7px 0;margin:0}
-    .guarantee-mini{background:var(--cream);border:2px dashed var(--gold);border-radius:14px;padding:18px 20px;margin-top:24px}
+    .bump{margin-top:20px;border:2px dashed var(--gold);background:#fffdf8;border-radius:14px;padding:16px 18px;display:flex;gap:13px;align-items:flex-start;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+    .bump:hover{background:#fff8ec}
+    .bump.on{border-style:solid;border-color:#1E6B52;background:#f3faf6}
+    .bump input{margin-top:3px;width:20px;height:20px;accent-color:#1E6B52;flex:none;cursor:pointer}
+    .bump-body strong{display:block;font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;font-size:.92rem;color:var(--navy)}
+    .bump-body p{color:var(--grey);font-size:.86rem;margin-top:4px}
+    .bump-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:10px;margin-bottom:6px}
+    .field{margin-bottom:14px}
+    .field label{display:block;font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
+    .field input{width:100%;padding:13px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.97rem;background:#fff;color:var(--ink)}
+    .field input:focus{outline:none;border-color:var(--red)}
+    .field .hint{font-size:.78rem;color:var(--grey);margin-top:5px}
+    .field.invalid input{border-color:var(--red);background:#fdf3f1}
+    .sum-line{display:flex;justify-content:space-between;align-items:baseline;color:var(--grey);font-size:.92rem;padding:6px 0}
+    .sum-line.bumpline{display:none;color:#1E6B52;font-weight:600}
+    .total-row{display:flex;justify-content:space-between;align-items:baseline;border-top:2px solid var(--navy);margin-top:10px;padding-top:14px}
+    .total-row .lbl{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--navy)}
+    .total-row .amt{font-family:'Anton',sans-serif;font-size:1.8rem;color:var(--red)}
+    .renew-note{font-size:.78rem;color:var(--grey);text-align:right;margin-top:4px}
+    .checkout-btn{display:block;text-align:center;margin-top:18px;font-size:1.18rem;padding:18px 20px;width:100%;border:none;cursor:pointer}
+    .pay-secure{display:flex;align-items:center;justify-content:center;gap:7px;font-size:.8rem;color:var(--grey);margin-top:12px}
+    .trust{margin-top:18px;border-top:1px solid #f1ece2;padding-top:16px}
+    .trust p{display:flex;gap:10px;color:var(--grey);font-size:.88rem;padding:6px 0;margin:0}
+    .cardrow{display:flex;align-items:center;gap:8px;margin-top:14px;opacity:.85;flex-wrap:wrap}
+    .cardrow span{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--grey);font-weight:700}
+    .cardrow .badge{background:var(--cream);border:1px solid #e7dbc6;border-radius:6px;padding:4px 9px;font-size:.72rem;font-weight:700;color:var(--navy)}
+    .guarantee-mini{background:var(--cream);border:2px dashed var(--gold);border-radius:14px;padding:18px 20px;margin-top:22px}
     .guarantee-mini strong{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.04em;color:var(--navy)}
-    .guarantee-mini p{color:var(--grey);font-size:.9rem;margin-top:6px}
-    .next-steps{margin-top:26px}
-    .next-steps h3{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:1rem;letter-spacing:.05em;margin-bottom:10px}
-    .next-steps ol{margin-left:18px;color:var(--grey);font-size:.92rem}
+    .guarantee-mini p{color:var(--grey);font-size:.88rem;margin-top:6px}
+    .proof{margin-top:20px}
+    .stars{color:var(--gold);font-size:1.15rem;letter-spacing:2px}
+    .proof-count{font-size:.86rem;color:var(--grey);margin-top:4px}
+    .proof-count b{color:var(--navy)}
+    .tlist{margin-top:16px;display:grid;gap:12px}
+    .tcard{background:var(--cream);border:1px solid #ecdfc8;border-radius:12px;padding:15px 17px}
+    .tcard p{font-size:.9rem;color:var(--ink);line-height:1.55}
+    .tcard .who{display:flex;align-items:center;gap:9px;margin-top:9px}
+    .tcard .av{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font-family:'Anton',sans-serif;font-size:.85rem;flex:none}
+    .tcard .who small{color:var(--grey);font-size:.78rem;display:block}
+    .tcard .who b{font-size:.84rem;color:var(--navy)}
+    .verified{margin-left:auto;color:#1E6B52;font-size:.72rem;font-weight:700;white-space:nowrap}
+    .urgency{display:flex;align-items:center;gap:10px;background:#fff4f1;border:1px solid #f3cabf;border-radius:12px;padding:12px 15px;margin-top:18px}
+    .urgency .pulse{width:10px;height:10px;border-radius:50%;background:var(--red);flex:none;box-shadow:0 0 0 rgba(192,57,43,.5);animation:pulse 1.8s infinite}
+    @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}70%{box-shadow:0 0 0 9px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+    .urgency p{font-size:.85rem;color:var(--navy)}
+    .urgency b{color:var(--red)}
+    @media (prefers-reduced-motion: reduce){.urgency .pulse{animation:none}}
+    .next-steps{margin-top:22px}
+    .next-steps h3{font-family:'Anton',sans-serif;text-transform:uppercase;font-size:.95rem;letter-spacing:.05em;margin-bottom:10px;color:var(--navy)}
+    .next-steps ol{margin-left:18px;color:var(--grey);font-size:.9rem}
     .next-steps li{padding:5px 0}
     .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}
     .back-link:hover{color:var(--red)}
+    .live-toast{position:fixed;left:18px;bottom:18px;z-index:60;max-width:320px;background:#fff;border-radius:14px;box-shadow:0 14px 34px rgba(33,48,63,.22);border:1px solid #ecdfc8;padding:13px 16px 13px 14px;display:flex;gap:11px;align-items:center;transform:translateY(140%);opacity:0;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .45s}
+    .live-toast.show{transform:translateY(0);opacity:1}
+    .live-toast .lt-ic{width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;flex:none;font-size:1rem}
+    .live-toast .lt-txt b{font-size:.86rem;color:var(--navy);display:block}
+    .live-toast .lt-txt small{font-size:.76rem;color:var(--grey)}
+    @media(max-width:560px){.live-toast{left:10px;right:10px;max-width:none;bottom:78px}}
+    .sticky-buy{position:fixed;left:0;right:0;bottom:0;z-index:55;background:#fff;border-top:1px solid #e7dbc6;box-shadow:0 -8px 24px rgba(33,48,63,.12);padding:11px 16px;display:none;align-items:center;gap:12px}
+    .sticky-buy .sb-info small{font-size:.7rem;color:var(--grey);display:block;text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+    .sticky-buy .sb-info b{font-family:'Anton',sans-serif;font-size:1.25rem;color:var(--navy)}
+    .sticky-buy a{flex:1;text-align:center;padding:14px;font-size:1rem}
+    @media(max-width:860px){.sticky-buy{display:flex}.cart-wrap{padding-bottom:150px}}
   </style>
 </head>
 <body>
@@ -55,40 +111,85 @@
       <a class="back-link" href="index.html" style="margin-left:auto">← Keep browsing</a>
     </nav>
   </header>
-
   <main class="cart-wrap">
     <div class="cart-head">
       <h1 class="stacked-head center"><span class="h-caps">You're one step away</span><span class="h-script">from never being forgotten</span></h1>
     </div>
-
+    <div class="steps-bar" aria-hidden="true">
+      <span class="st"><span class="dot">1</span>Choose plan</span>
+      <span class="bar"></span>
+      <span class="st active"><span class="dot">2</span>Checkout</span>
+      <span class="bar"></span>
+      <span class="st"><span class="dot">3</span>Build your list</span>
+    </div>
     <div class="cart-grid">
-      <!-- Order summary -->
       <section class="cart-card" aria-label="Order summary">
-        <p class="plan-badge" id="planBadge" style="position:static;display:inline-block;transform:none;margin-bottom:14px">Your Plan</p>
+        <p class="plan-badge" id="planBadge" style="position:static;display:inline-block;transform:none;margin-bottom:12px">Your Plan</p>
         <p class="cart-plan-name" id="planName">—</p>
         <p class="cart-price" id="planPrice">—</p>
         <ul class="cart-feats" id="planFeats"></ul>
         <label class="switch-label" for="planSwitch">Change plan</label>
         <select id="planSwitch" aria-label="Change plan"></select>
+        <label class="bump" id="bumpBox" for="bumpChk" hidden>
+          <input type="checkbox" id="bumpChk">
+          <span class="bump-body">
+            <span class="bump-tag" id="bumpTag">Add &amp; save</span>
+            <strong id="bumpTitle">—</strong>
+            <p id="bumpSub">—</p>
+          </span>
+        </label>
+        <div class="urgency">
+          <span class="pulse" aria-hidden="true"></span>
+          <p><b>Onboarding for June is filling up.</b> Order today and your first mailing is scheduled within 7 days.</p>
+        </div>
+        <div class="proof">
+          <div class="stars" aria-label="4.9 out of 5 stars">★★★★★</div>
+          <p class="proof-count"><b>4.9/5</b> from <b>1,200+</b> agents, dealers &amp; families who never miss a date</p>
+          <div class="tlist">
+            <div class="tcard">
+              <p>"A past buyer called me after getting his one-year anniversary card — listed his rental with me the same week. AfterSold paid for itself in a single email."</p>
+              <div class="who"><span class="av">DR</span><span><b>Dana R.</b><small>Realtor · Austin, TX</small></span><span class="verified">✓ Verified</span></div>
+            </div>
+            <div class="tcard">
+              <p>"My buyers get a card on their purchase anniversary signed from me. Three trade-ins came back to my store last quarter. Nobody else on the lot does this."</p>
+              <div class="who"><span class="av">MT</span><span><b>Marcus T.</b><small>Sales Mgr · Auto Dealer, OH</small></span><span class="verified">✓ Verified</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="cart-card" aria-label="Checkout">
+        <p class="card-title">📨 Where should we send your receipt?</p>
+        <div class="field" id="emailField">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" autocomplete="email" inputmode="email" placeholder="you@business.com" required>
+          <p class="hint">Your receipt, list-builder link, and monthly recaps go here. No spam, ever.</p>
+        </div>
+        <div class="field">
+          <label for="fname">First name <span style="font-weight:400;text-transform:none;color:var(--grey)">(so we can sign it from you)</span></label>
+          <input type="text" id="fname" name="fname" autocomplete="given-name" placeholder="Jessica">
+        </div>
+        <div class="sum-line"><span id="sumPlanLbl">Plan</span><span id="sumPlanAmt">—</span></div>
+        <div class="sum-line bumpline" id="sumBumpLine"><span id="sumBumpLbl">Add-on</span><span id="sumBumpAmt">—</span></div>
+        <div class="total-row"><span class="lbl">Total today</span><span class="amt" id="totalAmt">—</span></div>
+        <p class="renew-note" id="renewNote">Then billed monthly. Cancel anytime.</p>
+        <a class="button button-primary checkout-btn" id="checkoutBtn" href="#" role="button">Proceed to Secure Checkout →</a>
+        <p class="renew-note" id="payNote" style="display:none;text-align:center;margin-top:9px">We'll email you a secure payment link to finish — usually within the hour.</p>
+        <div class="pay-secure">🔒 256-bit encrypted · powered by <b>Stripe</b></div>
+        <div class="cardrow">
+          <span>We accept</span>
+          <span class="badge">VISA</span><span class="badge">MASTERCARD</span><span class="badge">AMEX</span><span class="badge">APPLE PAY</span>
+        </div>
+        <div class="trust">
+          <p>📆 Month-to-month billing — cancel anytime, in one email</p>
+          <p>✍️ Every piece signed from you, never from us</p>
+          <p>📬 First mailing scheduled within 7 days</p>
+        </div>
         <div class="guarantee-mini">
           <strong>🛡️ Love-It Guarantee</strong>
           <p>If your first mailing doesn't make you smile, reply to your receipt and we'll refund the month. No contract — cancel anytime, in one email.</p>
         </div>
-      </section>
-
-      <!-- Checkout -->
-      <section class="cart-card" aria-label="Checkout">
-        <div class="total-row"><span class="lbl">Total today</span><span class="amt" id="totalAmt">—</span></div>
-        <!-- TODO: replace each plan's "link" in the PLANS object below with your real Stripe Payment Link -->
-        <a class="button button-primary checkout-btn" id="checkoutBtn" href="#">Proceed to Secure Checkout →</a>
-        <div class="trust">
-          <p>🔒 256-bit encrypted checkout powered by Stripe</p>
-          <p>📆 Month-to-month billing — cancel anytime</p>
-          <p>✍️ Every piece signed from you, never from us</p>
-          <p>📬 First mailing scheduled within 7 days</p>
-        </div>
         <div class="next-steps">
-          <h3>What happens after checkout</h3>
+          <h3>What happens right after checkout</h3>
           <ol>
             <li>You get a 2-minute form to build your list — names, addresses, big dates.</li>
             <li>Pick categories for each person (birthdays, holidays, heritage…).</li>
@@ -98,56 +199,199 @@
       </section>
     </div>
   </main>
-
+  <div class="live-toast" id="liveToast" role="status" aria-live="polite">
+    <span class="lt-ic" aria-hidden="true">✉</span>
+    <span class="lt-txt"><b id="ltName">—</b><small id="ltMeta">—</small></span>
+  </div>
+  <div class="sticky-buy" aria-hidden="true">
+    <span class="sb-info"><small>Total today</small><b id="stickyTotal">—</b></span>
+    <a class="button button-primary" id="stickyBtn" href="#">Secure Checkout →</a>
+  </div>
   <footer class="site-footer">
     <div class="footer-inner">
       <p>© 2026 AfterSold. All rights reserved.</p>
       <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
     </div>
   </footer>
-
   <script>
   (function(){
-    // TODO: replace every "link" below with your real Stripe Payment Link
+    "use strict";
     var PLANS = {
-      "one-month":      {name:"One a Month",      price:"$12",  per:"/mo", total:"$12/mo",  badge:"Family Plan", link:"#ADD-STRIPE-LINK-one-month",
-        feats:["1 card or letter every month","Any category, any person","Signed from you"]},
-      "three-month":    {name:"Three a Month",    price:"$29",  per:"/mo", total:"$29/mo",  badge:"Most Loved", link:"#ADD-STRIPE-LINK-three-month",
-        feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"]},
-      "ten-month":      {name:"Ten a Month",      price:"$79",  per:"/mo", total:"$79/mo",  badge:"Family Plan", link:"#ADD-STRIPE-LINK-ten-month",
-        feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"]},
-      "whole-family":   {name:"The Whole Family", price:"$129", per:"/mo", total:"$129/mo", badge:"Family Plan", link:"#ADD-STRIPE-LINK-whole-family",
-        feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"]},
-      "year":           {name:"The Year Plan",    price:"$119", per:"/yr", total:"$119/yr", badge:"Best Value", link:"#ADD-STRIPE-LINK-year",
+      "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:"#ADD-STRIPE-LINK-one-month",
+        feats:["1 card or letter every month","Any category, any person","Signed from you"],
+        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-one-month-annual"}},
+      "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:"#ADD-STRIPE-LINK-three-month",
+        feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"],
+        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-three-month-annual"}},
+      "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:"#ADD-STRIPE-LINK-ten-month",
+        feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"],
+        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-ten-month-annual"}},
+      "whole-family":{name:"The Whole Family",num:129,per:"/mo",badge:"Family Plan",link:"#ADD-STRIPE-LINK-whole-family",
+        feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"],
+        bump:{type:"annual",num:1290,save:"Save $258",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-whole-family-annual"}},
+      "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:"#ADD-STRIPE-LINK-year",
         feats:["Every birthday & anniversary covered for a full year","Up to 12 big days, scheduled once","Never forget that big day again"]},
-      "keep-in-touch":  {name:"Keep In Touch",    price:"$99",  per:"/mo", total:"$99/mo",  badge:"Business Plan", link:"#ADD-STRIPE-LINK-keep-in-touch",
-        feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"]},
-      "never-forgotten":{name:"Never Forgotten",  price:"$179", per:"/mo", total:"$179/mo", badge:"Most Popular", link:"#ADD-STRIPE-LINK-never-forgotten",
-        feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"]},
-      "letters":        {name:"AfterSold Letters",price:"$249", per:"/mo", total:"$249/mo", badge:"Business Plan", link:"#ADD-STRIPE-LINK-letters",
-        feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"]}
+      "keep-in-touch":{name:"Keep In Touch",num:99,per:"/mo",badge:"Business Plan",link:"#ADD-STRIPE-LINK-keep-in-touch",
+        feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"#ADD-STRIPE-LINK-keep-in-touch-plus-gift"}},
+      "never-forgotten":{name:"Never Forgotten",num:179,per:"/mo",badge:"Most Popular",link:"#ADD-STRIPE-LINK-never-forgotten",
+        feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"],
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"#ADD-STRIPE-LINK-never-forgotten-plus-gift"}},
+      "letters":{name:"AfterSold Letters",num:249,per:"/mo",badge:"Business Plan",link:"#ADD-STRIPE-LINK-letters",
+        feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
+        bump:{type:"annual",num:2490,save:"Save $498",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-letters-annual"}}
     };
-    var sel = document.getElementById('planSwitch');
-    var GROUPS = [["👪 For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],["💼 For Business (Realtors & Dealers)",["keep-in-touch","never-forgotten","letters"]]];
+    var GROUPS = [
+      ["For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],
+      ["For Business (Realtors & Dealers)",["keep-in-touch","never-forgotten","letters"]]
+    ];
+    var $ = function(id){return document.getElementById(id);};
+    var money = function(n){return "$"+n.toLocaleString("en-US");};
+    var ORDER_EMAIL = "600589mbm@gmail.com";
+    var placeholderMode = false;
+    function isPlaceholder(l){ return !l || l.charAt(0) === "#"; }
+    function buildMailto(){
+      var name = $('fname').value.trim(), email = $('email').value.trim();
+      var planTxt = $('sumPlanLbl').textContent + ": " + $('sumPlanAmt').textContent;
+      var addon = ($('sumBumpLine').style.display !== "none") ? "\nAdd-on - " + $('sumBumpLbl').textContent + ": " + $('sumBumpAmt').textContent : "";
+      var subject = "AfterSold order - " + PLANS[current].name;
+      var body = "Hi AfterSold team,\n\nI'd like to start this plan:\n\n" + planTxt + addon + "\nTotal today: " + $('totalAmt').textContent + "\n\nName: " + (name || "(add your name)") + "\nEmail: " + (email || "(add your email)") + "\n\nPlease send me a secure payment link to complete my order. Thanks!";
+      return "mailto:" + ORDER_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    }
+    var sel = $('planSwitch');
     GROUPS.forEach(function(g){
-      var og=document.createElement('optgroup'); og.label=g[0];
-      g[1].forEach(function(k){var o=document.createElement('option'); o.value=k; o.textContent=PLANS[k].name+" — "+PLANS[k].total; og.appendChild(o);});
+      var og = document.createElement('optgroup'); og.label = g[0];
+      g[1].forEach(function(k){
+        var o = document.createElement('option'); o.value = k;
+        o.textContent = PLANS[k].name + " - " + money(PLANS[k].num) + PLANS[k].per;
+        og.appendChild(o);
+      });
       sel.appendChild(og);
     });
-    function render(id){
-      var p = PLANS[id] || PLANS["three-month"];
-      if(!PLANS[id]) id = "three-month";
-      document.getElementById('planName').textContent = p.name;
-      document.getElementById('planBadge').textContent = p.badge;
-      document.getElementById('planPrice').innerHTML = p.price+'<span>'+p.per+'</span>';
-      document.getElementById('totalAmt').textContent = p.total;
-      document.getElementById('checkoutBtn').setAttribute('href', p.link);
-      var ul = document.getElementById('planFeats'); ul.innerHTML='';
-      p.feats.forEach(function(f){var li=document.createElement('li');li.textContent=f;ul.appendChild(li);});
-      sel.value = id;
-      try{history.replaceState(null,'','cart.html?plan='+id);}catch(e){}
+    var current = "three-month";
+    function bumpActive(){ var b = $('bumpChk'); return !$('bumpBox').hasAttribute('hidden') && b.checked; }
+    function recalc(){
+      var p = PLANS[current], b = p.bump, on = bumpActive();
+      var totalNum, per, renew, link;
+      if(on && b.type === "annual"){
+        totalNum = b.num; per = "/yr";
+        renew = "Billed yearly. Renews yearly. Cancel anytime.";
+        link = b.link;
+        $('sumPlanLbl').textContent = p.name + " (annual)";
+        $('sumPlanAmt').textContent = money(b.num) + "/yr";
+        $('sumBumpLine').style.display = "none";
+      } else if(on && b.type === "onetime"){
+        totalNum = p.num + b.num; per = "";
+        renew = "Then " + money(p.num) + p.per + " after. The $" + b.num + " gift is a one-time charge.";
+        link = b.link;
+        $('sumPlanLbl').textContent = p.name;
+        $('sumPlanAmt').textContent = money(p.num) + p.per;
+        $('sumBumpLbl').textContent = "Local History gift (one-time)";
+        $('sumBumpAmt').textContent = money(b.num);
+        $('sumBumpLine').style.display = "flex";
+      } else {
+        totalNum = p.num; per = p.per;
+        renew = p.per === "/yr" ? "Billed yearly. Renews yearly. Cancel anytime." : "Then billed monthly. Cancel anytime.";
+        link = p.link;
+        $('sumPlanLbl').textContent = p.name;
+        $('sumPlanAmt').textContent = money(p.num) + p.per;
+        $('sumBumpLine').style.display = "none";
+      }
+      var totalStr = money(totalNum) + (per || "");
+      $('totalAmt').textContent = totalStr;
+      $('renewNote').textContent = renew;
+      $('stickyTotal').textContent = totalStr;
+      placeholderMode = isPlaceholder(link);
+      var href = placeholderMode ? buildMailto() : link;
+      $('checkoutBtn').setAttribute('href', href);
+      $('stickyBtn').setAttribute('href', href);
+      $('checkoutBtn').textContent = placeholderMode ? "Reserve My Plan →" : "Proceed to Secure Checkout →";
+      $('stickyBtn').textContent   = placeholderMode ? "Reserve My Plan →" : "Secure Checkout →";
+      $('payNote').style.display   = placeholderMode ? "block" : "none";
     }
-    sel.addEventListener('change', function(){render(this.value);});
+    function render(id){
+      if(!PLANS[id]) id = "three-month";
+      current = id;
+      var p = PLANS[id];
+      $('planName').textContent = p.name;
+      $('planBadge').textContent = p.badge;
+      $('planPrice').innerHTML = money(p.num) + '<span>' + p.per + '</span>';
+      var ul = $('planFeats'); ul.innerHTML = '';
+      p.feats.forEach(function(f){ var li = document.createElement('li'); li.textContent = f; ul.appendChild(li); });
+      var box = $('bumpBox'), chk = $('bumpChk');
+      chk.checked = false; box.classList.remove('on');
+      if(p.bump){
+        box.removeAttribute('hidden');
+        $('bumpTag').textContent = p.bump.save;
+        $('bumpTitle').textContent = p.bump.title;
+        $('bumpSub').textContent = p.bump.sub;
+      } else {
+        box.setAttribute('hidden','');
+      }
+      sel.value = id;
+      recalc();
+      try{ history.replaceState(null,'','cart.html?plan='+id); }catch(e){}
+    }
+    sel.addEventListener('change', function(){ render(this.value); });
+    $('bumpChk').addEventListener('change', function(){
+      $('bumpBox').classList.toggle('on', this.checked);
+      recalc();
+    });
+    function captureLead(){
+      try{
+        var lead = {email:$('email').value.trim(), name:$('fname').value.trim(), plan:current, bump:bumpActive(), ts:Date.now()};
+        window.__afterSoldLead = lead;
+        // TODO: POST `lead` to your capture endpoint, e.g.
+        // fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+      }catch(e){}
+    }
+    function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+    function handleCheckout(e){
+      var email = $('email').value.trim();
+      var field = $('emailField');
+      if(!validEmail(email)){
+        e.preventDefault();
+        field.classList.add('invalid');
+        $('email').focus();
+        var h = field.querySelector('.hint');
+        h.textContent = "Please enter a valid email so we can send your receipt and list-builder link.";
+        h.style.color = "var(--red)";
+        return;
+      }
+      field.classList.remove('invalid');
+      captureLead();
+      if(placeholderMode){
+        e.preventDefault();
+        window.location.href = buildMailto();
+      }
+    }
+    $('checkoutBtn').addEventListener('click', handleCheckout);
+    $('stickyBtn').addEventListener('click', handleCheckout);
+    $('email').addEventListener('input', function(){
+      if(validEmail(this.value.trim())){
+        $('emailField').classList.remove('invalid');
+        var h2 = $('emailField').querySelector('.hint');
+        h2.textContent = "Your receipt, list-builder link, and monthly recaps go here. No spam, ever.";
+        h2.style.color = "var(--grey)";
+      }
+    });
+    var ACTS = [
+      ["Dana R. just started Never Forgotten","Realtor · Austin, TX · 2 min ago"],
+      ["A car dealer in Columbus added the gift","Keep In Touch · 7 min ago"],
+      ["Maria L. covered her whole family","The Whole Family · 11 min ago"],
+      ["James P. switched to yearly billing","AfterSold Letters · 18 min ago"],
+      ["A Realtor in Tampa just checked out","Never Forgotten · 23 min ago"],
+      ["Grace W. started One a Month","Family plan · 31 min ago"]
+    ];
+    var toast = $('liveToast'), ai = 0;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function showToast(){
+      var a = ACTS[ai % ACTS.length]; ai++;
+      $('ltName').textContent = a[0]; $('ltMeta').textContent = a[1];
+      toast.classList.add('show');
+      setTimeout(function(){ toast.classList.remove('show'); }, 4500);
+    }
+    if(!reduce){ setTimeout(function(){ showToast(); setInterval(showToast, 11000); }, 3500); }
     render(new URLSearchParams(location.search).get('plan'));
   })();
   </script>
