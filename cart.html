@@ -405,8 +405,27 @@
       ["Maria L.","The Whole Family · Denver, CO"],
       ["James P.","AfterSold Letters · Tampa, FL"],
       ["Grace W.","One a Month · Portland, OR"],
-      ["Robert K.","Never Forgotten · Nashville, TN"]
+      ["Robert K.","Never Forgotten · Nashville, TN"],
+      ["Linda M.","Keep In Touch · Charlotte, NC"],
+      ["Carlos D.","AfterSold Letters · Phoenix, AZ"],
+      ["Emily S.","Three a Month · Madison, WI"],
+      ["Tyler B.","Never Forgotten · Kansas City, MO"],
+      ["Priya N.","The Whole Family · San Jose, CA"],
+      ["Frank G.","Keep In Touch · Pittsburgh, PA"],
+      ["Aisha J.","Ten a Month · Atlanta, GA"],
+      ["Derek H.","AfterSold Letters · Boise, ID"],
+      ["Sofia V.","The Year Plan · Albuquerque, NM"],
+      ["Nathan C.","Never Forgotten · Omaha, NE"],
+      ["Rachel F.","Keep In Touch · Louisville, KY"],
+      ["Vincent A.","Three a Month · Providence, RI"],
+      ["Hannah O.","One a Month · Des Moines, IA"],
+      ["Greg P.","Never Forgotten · Spokane, WA"],
+      ["Monica E.","The Whole Family · Sarasota, FL"],
+      ["Brandon L.","Keep In Touch · Tulsa, OK"],
+      ["Olivia T.","AfterSold Letters · Richmond, VA"],
+      ["Sam W.","Ten a Month · Salt Lake City, UT"]
     ];
+    for(var zi=ACTS.length-1; zi>0; zi--){ var zj=Math.floor(Math.random()*(zi+1)); var zt=ACTS[zi]; ACTS[zi]=ACTS[zj]; ACTS[zj]=zt; }
     var toast = $('liveToast'), ai = 0;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     function showToast(){
