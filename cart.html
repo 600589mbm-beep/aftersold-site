@@ -120,6 +120,12 @@
     .sticky-buy .sb-info b{font-family:'Anton',sans-serif;font-size:1.25rem;color:var(--navy)}
     .sticky-buy a{flex:1;text-align:center;padding:14px;font-size:1rem}
     @media(max-width:860px){.sticky-buy{display:flex}.cart-wrap{padding-bottom:150px}}
+    .deal-bar{background:linear-gradient(90deg,var(--red),#e0573f);color:#fff;text-align:center;padding:11px 16px;font-size:.92rem;border-radius:12px;margin:0 0 20px;box-shadow:0 8px 20px rgba(192,57,43,.28)}
+    .deal-bar strong{color:#FFE3B3}
+    .deal-bar #dealClock{display:inline-block;font-family:'Anton',sans-serif;background:#fff;color:var(--red);padding:1px 9px;border-radius:8px;font-size:1.02rem;letter-spacing:.04em;min-width:52px}
+    .price-was{color:var(--grey);font-weight:400;text-decoration:line-through;font-size:.5em;margin-right:5px}
+    .deal-tag{display:inline-block;background:#1E6B52;color:#fff;font-size:.3em;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:10px;vertical-align:middle;font-family:'Inter',sans-serif}
+    .total-row .amt .price-was{font-size:.55em}
   </style>
 </head>
 <body>
@@ -136,6 +142,7 @@
     </nav>
   </header>
   <main class="cart-wrap">
+    <div class="deal-bar" id="dealBar" hidden>⚡ <strong>FLASH DEAL: 50% OFF EVERYTHING</strong> — locked in if you check out within <span id="dealClock">5:00</span>. Discount auto-applies at Stripe checkout.</div>
     <div class="cart-head">
       <h1 class="stacked-head center"><span class="h-caps">You're one step away</span><span class="h-script">from never being forgotten</span></h1>
     </div>
@@ -241,29 +248,29 @@
   (function(){
     "use strict";
     var PLANS = {
-      "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/bJe8wP0J56FXaUx6QwbV600",
+      "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/bJe8wP0J56FXaUx6QwbV600",dealLink:"https://buy.stripe.com/cNi00j9fB6FXd2F5MsbV60f",
         feats:["1 card or letter every month","Any category, any person","Signed from you"],
-        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/7sY4gzcrN0hz3s5deUbV608"}},
-      "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:"https://buy.stripe.com/dRmcN577tfcte6J6QwbV601",
+        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/7sY4gzcrN0hz3s5deUbV608",dealLink:"https://buy.stripe.com/28E8wPbnJ4xPd2Fgr6bV60n"}},
+      "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:"https://buy.stripe.com/dRmcN577tfcte6J6QwbV601",dealLink:"https://buy.stripe.com/8x2dR9ajF4xPgeRcaQbV60g",
         feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"],
-        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/28E3cvdvRc0hgeR4IobV609"}},
-      "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/00wcN53Vhc0hbYB8YEbV602",
+        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/28E3cvdvRc0hgeR4IobV609",dealLink:"https://buy.stripe.com/28E9ATezV2pH1jXb6MbV60o"}},
+      "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/00wcN53Vhc0hbYB8YEbV602",dealLink:"https://buy.stripe.com/7sYaEXbnJ3tL2o15MsbV60h",
         feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"],
-        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/dRm4gz9fB3tLbYBgr6bV60a"}},
-      "whole-family":{name:"The Whole Family",num:129,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/14A4gz8bxaWd7Il1wcbV603",
+        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/dRm4gz9fB3tLbYBgr6bV60a",dealLink:"https://buy.stripe.com/28E28r3VhaWd3s5a2IbV60p"}},
+      "whole-family":{name:"The Whole Family",num:129,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/14A4gz8bxaWd7Il1wcbV603",dealLink:"https://buy.stripe.com/3cIbJ1fDZggx9QtcaQbV60i",
         feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"],
-        bump:{type:"annual",num:1290,save:"Save $258",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14A00j4Zl0hze6J4IobV60b"}},
-      "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:"https://buy.stripe.com/3cI8wP2Rdggx6Eh7UAbV604",
+        bump:{type:"annual",num:1290,save:"Save $258",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14A00j4Zl0hze6J4IobV60b",dealLink:"https://buy.stripe.com/fZufZh2Rdc0h9Qt7UAbV60q"}},
+      "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:"https://buy.stripe.com/3cI8wP2Rdggx6Eh7UAbV604",dealLink:"https://buy.stripe.com/8x26oH9fBd4l3s54IobV60j",
         feats:["Every birthday & anniversary covered for a full year","Up to 12 big days, scheduled once","Never forget that big day again"]},
-      "keep-in-touch":{name:"Keep In Touch",num:99,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRm3cv2Rd2pHe6J6QwbV605",
+      "keep-in-touch":{name:"Keep In Touch",num:99,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRm3cv2Rd2pHe6J6QwbV605",dealLink:"https://buy.stripe.com/cNi3cvfDZ8O5d2FcaQbV60k",
         feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/cNicN5ezV6FX2o10s8bV60d"}},
-      "never-forgotten":{name:"Never Forgotten",num:179,per:"/mo",badge:"Most Popular",link:"https://buy.stripe.com/00w9AT2Rd3tLaUxeiYbV606",
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/cNicN5ezV6FX2o10s8bV60d",dealLink:"https://buy.stripe.com/dRm14n2Rd8O5faN0s8bV60s"}},
+      "never-forgotten":{name:"Never Forgotten",num:179,per:"/mo",badge:"Most Popular",link:"https://buy.stripe.com/00w9AT2Rd3tLaUxeiYbV606",dealLink:"https://buy.stripe.com/aFa4gz77t2pHfaNcaQbV60l",
         feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/28E14n3VhaWd6Eh7UAbV60e"}},
-      "letters":{name:"AfterSold Letters",num:249,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/8x29ATfDZaWd7IldeUbV607",
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/28E14n3VhaWd6Eh7UAbV60e",dealLink:"https://buy.stripe.com/6oUfZh77t8O5faN3EkbV60t"}},
+      "letters":{name:"AfterSold Letters",num:249,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/8x29ATfDZaWd7IldeUbV607",dealLink:"https://buy.stripe.com/bJe4gz77taWd2o1deUbV60m",
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
-        bump:{type:"annual",num:2490,save:"Save $498",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14AbJ14Zl4xPaUxa2IbV60c"}}
+        bump:{type:"annual",num:2490,save:"Save $498",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14AbJ14Zl4xPaUxa2IbV60c",dealLink:"https://buy.stripe.com/7sY6oHbnJ6FXd2Ffn2bV60r"}}
     };
     var GROUPS = [
       ["For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],
@@ -271,6 +278,12 @@
     ];
     var $ = function(id){return document.getElementById(id);};
     var money = function(n){return "$"+n.toLocaleString("en-US");};
+    function fmtMoney(n){ return (n%1===0) ? "$"+n.toLocaleString("en-US") : "$"+n.toFixed(2); }
+    var DEAL_KEY='asd_deal_deadline';
+    var DEADLINE=(function(){ try{ var v=localStorage.getItem(DEAL_KEY), now=Date.now(); if(v){return +v;} var d=now+5*60*1000; localStorage.setItem(DEAL_KEY,String(d)); return d; }catch(e){ return Date.now()+5*60*1000; } })();
+    function dealActive(){ return Date.now() < DEADLINE; }
+    function sumAmt(n, per, deal){ per=per||""; return deal ? '<s class="price-was">'+fmtMoney(n)+per+'</s> '+fmtMoney(n*0.5)+per : fmtMoney(n)+per; }
+    function tickDeal(){ var bar=document.getElementById('dealBar'); if(!bar) return; var left=DEADLINE-Date.now(); if(left>0){ bar.removeAttribute('hidden'); var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000); document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec; } else { var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden',''); if(wasShown){ recalc(); } } }
     var ORDER_EMAIL = "600589mbm@gmail.com";
     var placeholderMode = false;
     function isPlaceholder(l){ return !l || l.charAt(0) === "#"; }
@@ -295,42 +308,46 @@
     var current = "three-month";
     function bumpActive(){ var b = $('bumpChk'); return !$('bumpBox').hasAttribute('hidden') && b.checked; }
     function recalc(){
-      var p = PLANS[current], b = p.bump, on = bumpActive();
-      var totalNum, per, renew, link;
+      var p = PLANS[current], b = p.bump, on = bumpActive(), deal = dealActive();
+      var f = deal ? 0.5 : 1;
+      var baseTotal, per, renew, link, dealLink;
       if(on && b.type === "annual"){
-        totalNum = b.num; per = "/yr";
+        baseTotal = b.num; per = "/yr"; link = b.link; dealLink = b.dealLink;
         renew = "Billed yearly. Renews yearly. Cancel anytime.";
-        link = b.link;
         $('sumPlanLbl').textContent = p.name + " (annual)";
-        $('sumPlanAmt').textContent = money(b.num) + "/yr";
+        $('sumPlanAmt').innerHTML = sumAmt(b.num, "/yr", deal);
         $('sumBumpLine').style.display = "none";
       } else if(on && b.type === "onetime"){
-        totalNum = p.num + b.num; per = "";
-        renew = "Then " + money(p.num) + p.per + " after. The $" + b.num + " gift is a one-time charge.";
-        link = b.link;
+        baseTotal = p.num + b.num; per = ""; link = b.link; dealLink = b.dealLink;
+        renew = "Then " + fmtMoney(p.num*f) + p.per + " after. The gift is a one-time charge.";
         $('sumPlanLbl').textContent = p.name;
-        $('sumPlanAmt').textContent = money(p.num) + p.per;
+        $('sumPlanAmt').innerHTML = sumAmt(p.num, p.per, deal);
         $('sumBumpLbl').textContent = "Local History gift (one-time)";
-        $('sumBumpAmt').textContent = money(b.num);
+        $('sumBumpAmt').innerHTML = sumAmt(b.num, "", deal);
         $('sumBumpLine').style.display = "flex";
       } else {
-        totalNum = p.num; per = p.per;
+        baseTotal = p.num; per = p.per; link = p.link; dealLink = p.dealLink;
         renew = p.per === "/yr" ? "Billed yearly. Renews yearly. Cancel anytime." : "Then billed monthly. Cancel anytime.";
-        link = p.link;
         $('sumPlanLbl').textContent = p.name;
-        $('sumPlanAmt').textContent = money(p.num) + p.per;
+        $('sumPlanAmt').innerHTML = sumAmt(p.num, p.per, deal);
         $('sumBumpLine').style.display = "none";
       }
-      var totalStr = money(totalNum) + (per || "");
-      $('totalAmt').textContent = totalStr;
+      $('planPrice').innerHTML = deal
+        ? '<s class="price-was">'+fmtMoney(p.num)+'</s> '+fmtMoney(p.num*f)+'<span>'+p.per+'</span> <span class="deal-tag">50% OFF</span>'
+        : fmtMoney(p.num)+'<span>'+p.per+'</span>';
+      var totalNum = baseTotal * f;
+      $('totalAmt').innerHTML = deal
+        ? fmtMoney(totalNum)+(per||"")+' <s class="price-was">'+fmtMoney(baseTotal)+(per||"")+'</s>'
+        : fmtMoney(totalNum)+(per||"");
       $('renewNote').textContent = renew;
-      $('stickyTotal').textContent = totalStr;
-      placeholderMode = isPlaceholder(link);
-      var href = placeholderMode ? buildMailto() : link;
+      $('stickyTotal').textContent = fmtMoney(totalNum)+(per||"");
+      var chosen = deal ? (dealLink || link) : link;
+      placeholderMode = isPlaceholder(chosen);
+      var href = placeholderMode ? buildMailto() : chosen;
       $('checkoutBtn').setAttribute('href', href);
       $('stickyBtn').setAttribute('href', href);
-      $('checkoutBtn').textContent = placeholderMode ? "Reserve My Plan →" : "Proceed to Secure Checkout →";
-      $('stickyBtn').textContent   = placeholderMode ? "Reserve My Plan →" : "Secure Checkout →";
+      $('checkoutBtn').textContent = placeholderMode ? "Reserve My Plan →" : (deal ? "Claim 50% Off — Checkout →" : "Proceed to Secure Checkout →");
+      $('stickyBtn').textContent   = placeholderMode ? "Reserve My Plan →" : (deal ? "Claim 50% Off →" : "Secure Checkout →");
       $('payNote').style.display   = placeholderMode ? "block" : "none";
     }
     function render(id){
@@ -457,6 +474,7 @@
       els.forEach(function(c){ io.observe(c); });
     })();
     render(new URLSearchParams(location.search).get('plan'));
+    tickDeal(); setInterval(tickDeal, 1000);
   })();
   </script>
 </body>
