@@ -266,9 +266,9 @@
       "keep-in-touch":{name:"Keep In Touch",num:169,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/6oU6oH1N95BTbYB0s8bV60y",dealLink:"https://buy.stripe.com/aFadR9gI31lDe6JdeUbV60z",
         feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
         bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/14A00j3Vhc0h9Qta2IbV60A",dealLink:"https://buy.stripe.com/9B63cv2Rd0hz1jXdeUbV60B"}},
-      "never-forgotten":{name:"Never Forgotten",num:619,per:"/mo",badge:"Most Popular",link:"https://buy.stripe.com/bJedR977taWd9Qt2AgbV60C",dealLink:"https://buy.stripe.com/5kQ5kD63pggx6Eh1wcbV60D",
+      "never-forgotten":{name:"Never Forgotten",num:350,per:"/mo",badge:"Most Popular",noDeal:true,link:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",dealLink:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",
         feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/6oU14n1N9aWd3s5deUbV60E",dealLink:"https://buy.stripe.com/aFa9AT4Zl9S97Il6QwbV60F"}},
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L",dealLink:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L"}},
       "letters":{name:"AfterSold Letters",num:699,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRmcN5ezVd4l8Mp0s8bV60G",dealLink:"https://buy.stripe.com/28EfZh1N91lDbYB8YEbV60I",
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
         bump:{type:"annual",num:6990,save:"Save $1,398",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/5kQ3cvcrN1lD8MpdeUbV60H",dealLink:"https://buy.stripe.com/9B68wPcrNggxfaN4IobV60J"}}
@@ -284,7 +284,7 @@
     var DEADLINE=(function(){ try{ var v=localStorage.getItem(DEAL_KEY), now=Date.now(); if(v){return +v;} var d=now+5*60*1000; localStorage.setItem(DEAL_KEY,String(d)); return d; }catch(e){ return Date.now()+5*60*1000; } })();
     function dealActive(){ return Date.now() < DEADLINE; }
     function sumAmt(n, per, deal){ per=per||""; return deal ? '<s class="price-was">'+fmtMoney(n)+per+'</s> '+fmtMoney(n*0.5)+per : fmtMoney(n)+per; }
-    function tickDeal(){ var bar=document.getElementById('dealBar'); if(!bar) return; var left=DEADLINE-Date.now(); if(left>0){ bar.removeAttribute('hidden'); var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000); document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec; } else { var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden',''); if(wasShown){ recalc(); } } }
+    function tickDeal(){ var bar=document.getElementById('dealBar'); if(!bar) return; var nd=(PLANS[current]&&PLANS[current].noDeal); var left=DEADLINE-Date.now(); if(left>0 && !nd){ bar.removeAttribute('hidden'); var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000); document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec; } else { var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden',''); if(wasShown && left<=0 && !nd){ recalc(); } } }
     var ORDER_EMAIL = "600589mbm@gmail.com";
     var placeholderMode = false;
     function isPlaceholder(l){ return !l || l.charAt(0) === "#"; }
@@ -309,7 +309,7 @@
     var current = "three-month";
     function bumpActive(){ var b = $('bumpChk'); return !$('bumpBox').hasAttribute('hidden') && b.checked; }
     function recalc(){
-      var p = PLANS[current], b = p.bump, on = bumpActive(), deal = dealActive();
+      var p = PLANS[current], b = p.bump, on = bumpActive(), deal = dealActive() && !p.noDeal;
       var f = deal ? 0.5 : 1;
       var baseTotal, per, renew, link, dealLink;
       if(on && b.type === "annual"){
@@ -372,6 +372,7 @@
       }
       sel.value = id;
       recalc();
+      tickDeal();
       try{ history.replaceState(null,'','cart.html?plan='+id); }catch(e){}
     }
     sel.addEventListener('change', function(){ render(this.value); });
