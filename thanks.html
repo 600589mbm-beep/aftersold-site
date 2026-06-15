@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>You're in! Let's build your list — AfterSold</title>
+  <meta name="description" content="Thank you for joining AfterSold. Build your client list in 2 minutes and we'll start mailing, signed from you.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .ty-wrap{max-width:720px;margin:0 auto;padding:34px 22px 100px}
+    .ty-head{text-align:center;margin-bottom:8px}
+    .checkmark{width:66px;height:66px;border-radius:50%;background:#1E6B52;color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-size:2rem;box-shadow:0 8px 22px rgba(30,107,82,.32);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+    @keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+    .ty-sub{text-align:center;color:var(--grey);max-width:520px;margin:8px auto 0;font-size:1.04rem}
+    .steps-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:26px auto 30px;max-width:520px;color:var(--grey);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .steps-bar .st{display:flex;align-items:center;gap:8px}
+    .steps-bar .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e7dbc6;color:var(--navy);font-family:'Anton',sans-serif}
+    .steps-bar .st.done .dot{background:#1E6B52;color:#fff}
+    .steps-bar .st.active .dot{background:var(--red);color:#fff}
+    .steps-bar .st.active{color:var(--navy)}
+    .steps-bar .bar{flex:1;height:2px;background:#e7dbc6;min-width:22px}
+    .ty-card{background:#fff;border-radius:18px;padding:30px 28px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
+    .ty-card h2{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);font-size:1.3rem;margin-bottom:4px}
+    .ty-card .lede{color:var(--grey);font-size:.95rem;margin-bottom:18px}
+    .field{margin-bottom:15px}
+    .field label{display:block;font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
+    .field .req{color:var(--red)}
+    .field input,.field textarea{width:100%;padding:13px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.97rem;background:#fff;color:var(--ink)}
+    .field textarea{min-height:150px;resize:vertical;line-height:1.5}
+    .field input:focus,.field textarea:focus{outline:none;border-color:var(--red)}
+    .field .hint{font-size:.78rem;color:var(--grey);margin-top:5px}
+    .field.invalid input,.field.invalid textarea{border-color:var(--red);background:#fdf3f1}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media(max-width:560px){.two{grid-template-columns:1fr}}
+    .submit-btn{display:block;width:100%;text-align:center;margin-top:8px;font-size:1.12rem;padding:17px 20px;border:none;cursor:pointer}
+    .or-note{text-align:center;color:var(--grey);font-size:.86rem;margin-top:14px}
+    .ty-trust{display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;margin-top:24px;color:var(--grey);font-size:.86rem}
+    .ty-ok{display:none;text-align:center;padding:18px;background:#f3faf6;border:2px solid #1E6B52;border-radius:14px;color:#1E6B52;font-weight:600;margin-top:16px}
+    .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}
+    .back-link:hover{color:var(--red)}
+  </style>
+</head>
+<body>
+  <div class="announce">✦ <strong>PAYMENT CONFIRMED.</strong> ONE QUICK STEP AND WE START MAILING. ✦</div>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" width="26" height="26" focusable="false" aria-hidden="true"><rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/><path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/></svg>
+        </span>
+        AfterSold
+      </a>
+      <a class="back-link" href="index.html" style="margin-left:auto">← Home</a>
+    </nav>
+  </header>
+
+  <main class="ty-wrap">
+    <div class="ty-head">
+      <div class="checkmark" aria-hidden="true">✓</div>
+      <h1 class="stacked-head center"><span class="h-caps">You're in!</span><span class="h-script">now let's build your list</span></h1>
+      <p class="ty-sub">Your subscription is active — thank you. Add your past clients below and your first mailing goes out within 7 days, signed from you.</p>
+    </div>
+
+    <div class="steps-bar" aria-hidden="true">
+      <span class="st done"><span class="dot">✓</span>Choose plan</span>
+      <span class="bar"></span>
+      <span class="st done"><span class="dot">✓</span>Checkout</span>
+      <span class="bar"></span>
+      <span class="st active"><span class="dot">3</span>Build your list</span>
+    </div>
+
+    <section class="ty-card">
+      <h2>Your 2-minute list builder</h2>
+      <p class="lede">One time, ten minutes. We handle every mailing after this.</p>
+      <form id="listForm" action="https://formspree.io/f/REPLACE_ME" method="POST" novalidate>
+        <div class="two">
+          <div class="field" id="fName"><label for="name">Your name <span class="req">*</span></label><input type="text" id="name" name="name" autocomplete="name" placeholder="Jessica Alvarez" required></div>
+          <div class="field" id="fBiz"><label for="business">Business / brokerage</label><input type="text" id="business" name="business" placeholder="Alvarez Realty"></div>
+        </div>
+        <div class="field" id="fEmail"><label for="email">Your email <span class="req">*</span></label><input type="email" id="email" name="email" autocomplete="email" inputmode="email" placeholder="you@business.com" required><p class="hint">We'll send your list-confirmation and monthly recaps here.</p></div>
+        <div class="field" id="fList"><label for="clients">Your past clients <span class="req">*</span></label>
+          <textarea id="clients" name="clients" placeholder="One per line — name, mailing address, closing/purchase date. Example:&#10;Sarah & Mike Chen, 412 Oak St, Austin TX 78704, closed 2024-06-14&#10;Dan Reilly, 88 Maple Ave, Round Rock TX 78664, closed 2023-11-02" required></textarea>
+          <p class="hint">Don't have it tidy? Paste whatever you have, or reply to your Stripe receipt with a spreadsheet/CRM export — we'll sort it.</p>
+        </div>
+        <div class="field"><label for="notes">Anything we should know? (optional)</label><input type="text" id="notes" name="notes" placeholder="VIP clients, tone preferences, car dealership vs. real estate…"></div>
+        <input type="hidden" name="_subject" value="New AfterSold client list">
+        <button type="submit" class="button button-primary submit-btn" id="submitBtn">Send my list & start mailing →</button>
+        <p class="or-note">🔒 Your list is used only to mail on your behalf. We never share it.</p>
+      </form>
+      <div class="ty-ok" id="okMsg">✓ Got it! Your list is in. We'll confirm by email and your first pieces go out within 7 days.</div>
+    </section>
+
+    <div class="ty-trust">
+      <span>✍️ Every piece signed from you</span>
+      <span>📬 First mailing within 7 days</span>
+      <span>📆 Cancel anytime</span>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 AfterSold. All rights reserved.</p>
+      <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    "use strict";
+    var ORDER_EMAIL = "600589mbm@gmail.com";
+    var form = document.getElementById('listForm');
+    var endpoint = form.getAttribute('action');
+    var usingFormspree = endpoint.indexOf('REPLACE_ME') === -1; // becomes true once a real Formspree ID is set
+    var $ = function(id){return document.getElementById(id);};
+    function valid(){
+      var ok = true;
+      [['name','fName'],['email','fEmail'],['clients','fList']].forEach(function(pair){
+        var v = $(pair[0]).value.trim();
+        var bad = (pair[0]==='email') ? !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) : v.length===0;
+        $(pair[1]).classList.toggle('invalid', bad);
+        if(bad) ok = false;
+      });
+      return ok;
+    }
+    function mailtoFallback(){
+      var subject = "New AfterSold client list — " + ($('name').value.trim() || "");
+      var body = "Name: " + $('name').value.trim()
+        + "\nBusiness: " + $('business').value.trim()
+        + "\nEmail: " + $('email').value.trim()
+        + "\nNotes: " + $('notes').value.trim()
+        + "\n\nClient list:\n" + $('clients').value.trim();
+      window.location.href = "mailto:" + ORDER_EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+    }
+    form.addEventListener('submit', function(e){
+      if(!valid()){ e.preventDefault(); var f=document.querySelector('.field.invalid input,.field.invalid textarea'); if(f) f.focus(); return; }
+      if(usingFormspree){
+        // Submit to Formspree via fetch so we can show inline success without leaving the page.
+        e.preventDefault();
+        var btn = $('submitBtn'); btn.textContent = "Sending…";
+        fetch(endpoint, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+          .then(function(r){
+            if(r.ok){ form.style.display='none'; $('okMsg').style.display='block'; }
+            else { btn.textContent="Send my list & start mailing →"; mailtoFallback(); }
+          })
+          .catch(function(){ btn.textContent="Send my list & start mailing →"; mailtoFallback(); });
+      } else {
+        // No Formspree ID yet → open a pre-filled email so the list still reaches you.
+        e.preventDefault();
+        mailtoFallback();
+        form.style.display='none'; $('okMsg').style.display='block';
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

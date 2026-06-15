@@ -243,27 +243,27 @@
     var PLANS = {
       "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/bJe8wP0J56FXaUx6QwbV600",
         feats:["1 card or letter every month","Any category, any person","Signed from you"],
-        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-one-month-annual"}},
+        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/7sY4gzcrN0hz3s5deUbV608"}},
       "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:"https://buy.stripe.com/dRmcN577tfcte6J6QwbV601",
         feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"],
-        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-three-month-annual"}},
+        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/28E3cvdvRc0hgeR4IobV609"}},
       "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/00wcN53Vhc0hbYB8YEbV602",
         feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"],
-        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-ten-month-annual"}},
+        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/dRm4gz9fB3tLbYBgr6bV60a"}},
       "whole-family":{name:"The Whole Family",num:129,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/14A4gz8bxaWd7Il1wcbV603",
         feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"],
-        bump:{type:"annual",num:1290,save:"Save $258",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-whole-family-annual"}},
+        bump:{type:"annual",num:1290,save:"Save $258",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14A00j4Zl0hze6J4IobV60b"}},
       "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:"https://buy.stripe.com/3cI8wP2Rdggx6Eh7UAbV604",
         feats:["Every birthday & anniversary covered for a full year","Up to 12 big days, scheduled once","Never forget that big day again"]},
       "keep-in-touch":{name:"Keep In Touch",num:99,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRm3cv2Rd2pHe6J6QwbV605",
         feats:["Up to 50 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"#ADD-STRIPE-LINK-keep-in-touch-plus-gift"}},
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/cNicN5ezV6FX2o10s8bV60d"}},
       "never-forgotten":{name:"Never Forgotten",num:179,per:"/mo",badge:"Most Popular",link:"https://buy.stripe.com/00w9AT2Rd3tLaUxeiYbV606",
         feats:["Up to 125 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","Welcome card within 7 days of closing","Quarterly strategy call"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"#ADD-STRIPE-LINK-never-forgotten-plus-gift"}},
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/28E14n3VhaWd6Eh7UAbV60e"}},
       "letters":{name:"AfterSold Letters",num:249,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/8x29ATfDZaWd7IldeUbV607",
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
-        bump:{type:"annual",num:2490,save:"Save $498",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"#ADD-STRIPE-LINK-letters-annual"}}
+        bump:{type:"annual",num:2490,save:"Save $498",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/14AbJ14Zl4xPaUxa2IbV60c"}}
     };
     var GROUPS = [
       ["For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],
@@ -361,12 +361,21 @@
       $('bumpBox').classList.toggle('on', this.checked);
       recalc();
     });
+    // Set your Formspree form ID (replace REPLACE_ME) to receive captured emails.
+    var FORMSPREE_LEAD = "https://formspree.io/f/REPLACE_ME";
     function captureLead(){
       try{
         var lead = {email:$('email').value.trim(), name:$('fname').value.trim(), plan:current, bump:bumpActive(), ts:Date.now()};
         window.__afterSoldLead = lead;
-        // TODO: POST `lead` to your capture endpoint, e.g.
-        // fetch('/api/lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(lead)});
+        if(FORMSPREE_LEAD.indexOf('REPLACE_ME')===-1){
+          var fd = new FormData();
+          fd.append('email', lead.email);
+          fd.append('name', lead.name);
+          fd.append('plan', current);
+          fd.append('bump', lead.bump ? 'yes' : 'no');
+          fd.append('_subject', 'New AfterSold checkout lead');
+          fetch(FORMSPREE_LEAD, {method:'POST', body:fd, headers:{'Accept':'application/json'}, keepalive:true});
+        }
       }catch(e){}
     }
     function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
