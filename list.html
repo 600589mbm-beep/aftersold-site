@@ -57,6 +57,14 @@
     .sendbar a.send[aria-disabled="true"]{opacity:.45;pointer-events:none}
     .tip{display:flex;gap:9px;background:var(--cream);border:2px dashed var(--gold);border-radius:12px;padding:13px 16px;margin-top:18px;color:var(--grey);font-size:.88rem}
     .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--red)}
+    .sig-card{margin-top:22px}
+    .sigpad-wrap{border:2px dashed #e7dbc6;border-radius:14px;background:#fffef9;background-image:linear-gradient(#f1ece2 1px,transparent 1px);background-size:100% 38px;background-position:0 9px;overflow:hidden}
+    #sigpad{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+    .sig-actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+    .btn-ghost{font-family:'Inter',sans-serif;font-weight:700;font-size:.85rem;padding:11px 16px;border-radius:10px;border:2px solid #e7dbc6;background:#fff;color:var(--navy);cursor:pointer}
+    .btn-ghost:hover{border-color:var(--red);color:var(--red)}
+    .sig-status{margin-top:10px;font-size:.9rem;color:var(--grey)}
+    .sendbar .count{max-width:none}
   </style>
 </head>
 <body>
@@ -101,11 +109,24 @@
 
     <div class="people" id="people"></div>
 
+    <section class="card sig-card">
+      <h2>✍️ Your signature</h2>
+      <p class="muted">Signed on every card and letter — so it's really from you. Draw it below with your mouse or finger, or upload a photo of your signature.</p>
+      <div class="sigpad-wrap"><canvas id="sigpad" width="640" height="190"></canvas></div>
+      <div class="sig-actions">
+        <button id="sigClear" type="button" class="btn-ghost">Clear</button>
+        <label class="btn-ghost" for="sigUpload">Upload image…</label>
+        <input type="file" id="sigUpload" accept="image/*" hidden>
+        <button id="sigSave" type="button" class="button button-primary">Save signature</button>
+      </div>
+      <p class="sig-status" id="sigStatus"></p>
+    </section>
+
     <div class="tip" id="tip" hidden>💡 Tip: a profile is <strong>&nbsp;Ready&nbsp;</strong> once it has a mailing address and at least one key date or category. Don't worry about perfection — paste what you have and we'll tidy it.</div>
   </main>
 
   <div class="sendbar">
-    <span class="count"><b id="countNum">0</b> on your list</span>
+    <span class="count" id="sendStatus">Add at least one person to begin</span>
     <a class="button button-primary send" id="sendBtn" href="#" aria-disabled="true">Send my list to AfterSold →</a>
   </div>
 
@@ -120,6 +141,7 @@
     function planCap(){ var k=planKey(); return (k&&PLAN_CAPS[k])?PLAN_CAPS[k]:125; }
     var $ = function(id){return document.getElementById(id);};
     function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
+    function sigData(){ try{ return localStorage.getItem("aftersold_signature"); }catch(e){ return null; } }
     function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
     function initials(n){ return (n||"?").trim().split(/\s+/).map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase()||"?"; }
     function isReady(p){
@@ -140,9 +162,16 @@
     function render(){
       var list=load(), wrap=$('people'); wrap.innerHTML="";
       var cap=planCap(), pk=planKey(), pname=(pk&&PLAN_NAMES[pk])?PLAN_NAMES[pk]:null, atCap=list.length>=cap;
-      $('countNum').textContent=list.length+" / "+cap;
+      var ready=list.filter(isReady).length, incomplete=list.length-ready, hasSig=!!sigData();
+      var canSend=list.length>0 && incomplete===0 && hasSig;
       $('tip').hidden = list.length===0;
-      var send=$('sendBtn'); send.setAttribute('aria-disabled', list.length? "false":"true");
+      var send=$('sendBtn'); send.setAttribute('aria-disabled', canSend?"false":"true");
+      var msg;
+      if(list.length===0) msg="Add at least one person to begin";
+      else if(incomplete>0) msg="\uD83D\uDCDD "+incomplete+" of "+list.length+" profiles still need details";
+      else if(!hasSig) msg="\u270D\uFE0F Add your signature below to finish";
+      else msg="\u2713 All "+list.length+" profile"+(list.length>1?"s":"")+" ready \u2014 tap Send";
+      $('sendStatus').textContent=msg;
       var ab=$('addBtn'); ab.disabled=atCap; ab.style.opacity=atCap?".5":"1"; ab.style.pointerEvents=atCap?"none":"auto";
       $('capNote').innerHTML = atCap
         ? "\uD83D\uDD12 You've used all <b>"+cap+"</b> spots on "+(pname?("the "+pname+" plan"):"your plan")+". <a href='index.html#pricing' style='color:var(--red);font-weight:700'>Upgrade for more \u2192</a>"
@@ -198,15 +227,44 @@
         if(p.heritage) lines.push("   Heritage/story: "+p.heritage);
         lines.push("");
       });
+      lines.push(sigData()? "Signature: attached as aftersold-signature.png (please attach the file that just downloaded).":"Signature: not provided.");
+      lines.push("");
       lines.push("Sent from the AfterSold list builder.");
       return "mailto:"+ORDER_EMAIL+"?subject="+encodeURIComponent("AfterSold list — "+list.length+" people")+"&body="+encodeURIComponent(lines.join("\n"));
     }
     $('sendBtn').addEventListener('click', function(e){
       e.preventDefault();
-      if(load().length===0) return;
+      if($('sendBtn').getAttribute('aria-disabled')==='true') return;
+      var sig=sigData();
+      if(sig){ try{ var a=document.createElement('a'); a.href=sig; a.download='aftersold-signature.png'; document.body.appendChild(a); a.click(); a.remove(); }catch(e2){} }
       window.location.href = buildEmail();
     });
 
+    // ---- Signature pad ----
+    (function(){
+      var canvas=$('sigpad'); if(!canvas) return;
+      var ctx=canvas.getContext('2d');
+      ctx.lineWidth=2.6; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle='#21303f';
+      var drawing=false,last=null,dirty=false;
+      function pos(e){ var r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height)}; }
+      function down(e){ drawing=true; last=pos(e); try{canvas.setPointerCapture(e.pointerId);}catch(x){} e.preventDefault(); }
+      function mv(e){ if(!drawing)return; var pt=pos(e); ctx.beginPath(); ctx.moveTo(last.x,last.y); ctx.lineTo(pt.x,pt.y); ctx.stroke(); last=pt; dirty=true; e.preventDefault(); }
+      function up(){ drawing=false; }
+      canvas.addEventListener('pointerdown',down); canvas.addEventListener('pointermove',mv); window.addEventListener('pointerup',up);
+      function setStatus(saved){ $('sigStatus').innerHTML = saved? "<span style='color:#1E6B52;font-weight:700'>\u2713 Signature saved</span>" : "Not saved yet \u2014 draw above or upload an image, then tap Save signature."; }
+      var existing=sigData();
+      if(existing){ var im0=new Image(); im0.onload=function(){ ctx.drawImage(im0,0,0,canvas.width,canvas.height); }; im0.src=existing; setStatus(true); } else { setStatus(false); }
+      $('sigClear').addEventListener('click', function(){ ctx.clearRect(0,0,canvas.width,canvas.height); dirty=false; });
+      $('sigUpload').addEventListener('change', function(){
+        var f=this.files&&this.files[0]; if(!f) return;
+        var rd=new FileReader(); rd.onload=function(){ var im=new Image(); im.onload=function(){ ctx.clearRect(0,0,canvas.width,canvas.height); var sc=Math.min(canvas.width/im.width,canvas.height/im.height); var w=im.width*sc,h=im.height*sc; ctx.drawImage(im,(canvas.width-w)/2,(canvas.height-h)/2,w,h); dirty=true; }; im.src=rd.result; }; rd.readAsDataURL(f);
+      });
+      $('sigSave').addEventListener('click', function(){
+        if(!dirty && !sigData()){ $('sigStatus').innerHTML="<span style='color:var(--red)'>Draw or upload your signature first.</span>"; return; }
+        try{ localStorage.setItem('aftersold_signature', canvas.toDataURL('image/png')); }catch(e){}
+        setStatus(true); render();
+      });
+    })();
     render();
   })();
   </script>
