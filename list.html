@@ -65,6 +65,13 @@
     .btn-ghost:hover{border-color:var(--red);color:var(--red)}
     .sig-status{margin-top:10px;font-size:.9rem;color:var(--grey)}
     .sendbar .count{max-width:none}
+    .ra-card{margin-top:22px}
+    .ra-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .ra-grid .full{grid-column:1/-1}
+    .ra-grid label{display:block;font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:5px}
+    .ra-grid input{width:100%;padding:12px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.95rem;background:#fff;color:var(--ink)}
+    .ra-grid input:focus{outline:none;border-color:var(--red)}
+    @media(max-width:560px){.ra-grid{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -109,6 +116,19 @@
 
     <div class="people" id="people"></div>
 
+    <section class="card ra-card">
+      <h2>🏠 Your return address</h2>
+      <p class="muted">The "from" on every envelope — your name customers see, and where USPS returns anything undeliverable. We never share it.</p>
+      <div class="ra-grid">
+        <div class="full"><label for="raName">Your name</label><input type="text" id="raName" placeholder="Jessica Alvarez" autocomplete="name"></div>
+        <div class="full"><label for="raEmail">Your email</label><input type="email" id="raEmail" placeholder="you@business.com" autocomplete="email"></div>
+        <div class="full"><label for="raStreet">Street address</label><input type="text" id="raStreet" placeholder="500 Main St, Suite 4"></div>
+        <div><label for="raCity">City</label><input type="text" id="raCity" placeholder="Austin"></div>
+        <div><label for="raState">State</label><input type="text" id="raState" placeholder="TX"></div>
+        <div><label for="raZip">ZIP</label><input type="text" id="raZip" inputmode="numeric" placeholder="78704"></div>
+      </div>
+    </section>
+
     <section class="card sig-card">
       <h2>✍️ Your signature</h2>
       <p class="muted">Signed on every card and letter — so it's really from you. Draw it below with your mouse or finger, or upload a photo of your signature.</p>
@@ -134,6 +154,7 @@
   (function(){
     "use strict";
     var ORDER_EMAIL = "600589mbm@gmail.com";
+    var WORKER_URL = "https://aftersold-mailer.YOURNAME.workers.dev"; // set to your deployed Worker URL to enable automation
     var KEY = "aftersold_list";
     var PLAN_CAPS={"one-month":1,"three-month":3,"ten-month":10,"whole-family":20,"year":12,"keep-in-touch":50,"never-forgotten":125,"letters":125};
     var PLAN_NAMES={"one-month":"One a Month","three-month":"Three a Month","ten-month":"Ten a Month","whole-family":"The Whole Family","year":"The Year Plan","keep-in-touch":"Keep In Touch","never-forgotten":"Never Forgotten","letters":"AfterSold Letters"};
@@ -142,6 +163,8 @@
     var $ = function(id){return document.getElementById(id);};
     function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
     function sigData(){ try{ return localStorage.getItem("aftersold_signature"); }catch(e){ return null; } }
+    function senderData(){ try{ return JSON.parse(localStorage.getItem("aftersold_sender")||"null"); }catch(e){ return null; } }
+    function hasSender(){ var x=senderData(); return !!(x && x.name && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.email||"") && x.address1 && x.city && x.state && x.zip); }
     function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
     function initials(n){ return (n||"?").trim().split(/\s+/).map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase()||"?"; }
     function isReady(p){
@@ -162,13 +185,14 @@
     function render(){
       var list=load(), wrap=$('people'); wrap.innerHTML="";
       var cap=planCap(), pk=planKey(), pname=(pk&&PLAN_NAMES[pk])?PLAN_NAMES[pk]:null, atCap=list.length>=cap;
-      var ready=list.filter(isReady).length, incomplete=list.length-ready, hasSig=!!sigData();
-      var canSend=list.length>0 && incomplete===0 && hasSig;
+      var ready=list.filter(isReady).length, incomplete=list.length-ready, hasSig=!!sigData(), hasSnd=hasSender();
+      var canSend=list.length>0 && incomplete===0 && hasSig && hasSnd;
       $('tip').hidden = list.length===0;
       var send=$('sendBtn'); send.setAttribute('aria-disabled', canSend?"false":"true");
       var msg;
       if(list.length===0) msg="Add at least one person to begin";
       else if(incomplete>0) msg="\uD83D\uDCDD "+incomplete+" of "+list.length+" profiles still need details";
+      else if(!hasSnd) msg="\uD83C\uDFE0 Add your return address to finish";
       else if(!hasSig) msg="\u270D\uFE0F Add your signature below to finish";
       else msg="\u2713 All "+list.length+" profile"+(list.length>1?"s":"")+" ready \u2014 tap Send";
       $('sendStatus').textContent=msg;
@@ -217,6 +241,7 @@
     function buildEmail(){
       var list=load();
       var lines=["AfterSold — My list ("+list.length+" "+(list.length===1?"person":"people")+")",""];
+      var snd=senderData(); if(snd){ lines.push("From / return address: "+[snd.name,snd.address1,snd.city,snd.state,snd.zip].filter(Boolean).join(", ")+"  ("+(snd.email||"")+")"); lines.push(""); }
       list.forEach(function(p,i){
         var a=p.address||{}, d=p.dates||{};
         lines.push((i+1)+") "+p.name+" — "+(p.relationship||""));
@@ -235,6 +260,13 @@
     $('sendBtn').addEventListener('click', function(e){
       e.preventDefault();
       if($('sendBtn').getAttribute('aria-disabled')==='true') return;
+      try{
+        if(WORKER_URL.indexOf('YOURNAME')===-1){
+          var snd0=senderData()||{};
+          fetch(WORKER_URL.replace(/\/$/,'')+'/api/list', {method:'POST', headers:{'Content-Type':'application/json'}, keepalive:true,
+            body:JSON.stringify({email:snd0.email||'', plan:(localStorage.getItem('aftersold_plan')||null), sender:snd0, signaturePng:sigData()||'', recipients:load()})});
+        }
+      }catch(eP){}
       var sig=sigData();
       if(sig){ try{ var a=document.createElement('a'); a.href=sig; a.download='aftersold-signature.png'; document.body.appendChild(a); a.click(); a.remove(); }catch(e2){} }
       try{ localStorage.setItem('aftersold_sent', String(Date.now())); }catch(e3){}
@@ -242,6 +274,15 @@
       setTimeout(function(){ window.location.href='sent.html'; }, 600);
     });
 
+    // ---- Return address binding ----
+    (function(){
+      var ids=['raName','raEmail','raStreet','raCity','raState','raZip'];
+      var x=senderData()||{};
+      $('raName').value=x.name||''; $('raEmail').value=x.email||''; $('raStreet').value=x.address1||'';
+      $('raCity').value=x.city||''; $('raState').value=x.state||''; $('raZip').value=x.zip||'';
+      function persist(){ try{ localStorage.setItem('aftersold_sender', JSON.stringify({name:$('raName').value.trim(),email:$('raEmail').value.trim(),address1:$('raStreet').value.trim(),city:$('raCity').value.trim(),state:$('raState').value.trim(),zip:$('raZip').value.trim()})); }catch(e){} render(); }
+      ids.forEach(function(id){ $(id).addEventListener('input', persist); });
+    })();
     // ---- Signature pad ----
     (function(){
       var canvas=$('sigpad'); if(!canvas) return;
