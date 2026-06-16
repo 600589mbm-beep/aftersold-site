@@ -37,7 +37,8 @@
     .cat:hover{border-color:var(--gold)}
     .cat input{accent-color:#1E6B52;width:16px;height:16px;cursor:pointer}
     .cat.on{background:#f3faf6;border-color:#1E6B52;font-weight:600}
-    .actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e7dbc6;box-shadow:0 -8px 24px rgba(33,48,63,.12);padding:13px 18px;display:flex;gap:12px;justify-content:center;align-items:center}
+    .actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e7dbc6;box-shadow:0 -8px 24px rgba(33,48,63,.12);padding:13px 18px;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
+    .actions button.save2{font-size:.95rem;padding:14px 20px;cursor:pointer}
     .actions a.cancel{color:var(--grey);text-decoration:none;font-weight:700;font-size:.92rem;padding:13px 16px}
     .actions a.cancel:hover{color:var(--red)}
     .actions button.save{font-size:1rem;padding:14px 28px;border:none;cursor:pointer}
@@ -111,6 +112,7 @@
 
   <div class="actions">
     <a class="cancel" href="list.html">Cancel</a>
+    <button class="button button-outline save2" id="addAnotherBtn" type="button">Save &amp; add another +</button>
     <button class="button button-primary save" id="saveBtn" type="button">Save &amp; back to list →</button>
   </div>
 
@@ -120,6 +122,8 @@
   (function(){
     "use strict";
     var KEY="aftersold_list";
+    var PLAN_CAPS={"one-month":1,"three-month":3,"ten-month":10,"whole-family":20,"year":12,"keep-in-touch":50,"never-forgotten":125,"letters":125};
+    function planCap(){ try{ var k=localStorage.getItem('aftersold_plan'); return (k&&PLAN_CAPS[k])?PLAN_CAPS[k]:125; }catch(e){ return 125; } }
     var CATS=["Birthday","Holidays","Anniversary","Local history","Heritage story","Just because","Get well","Congrats","Thinking of you"];
     var $=function(id){return document.getElementById(id);};
     function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
@@ -153,9 +157,9 @@
 
     function gatherCats(){ return Array.prototype.filter.call(document.querySelectorAll('#cats input'), function(c){return c.checked;}).map(function(c){return c.value;}); }
 
-    function doSave(){
+    function saveCurrent(){
       var name=$('name').value.trim();
-      if(!name){ $('fName').classList.add('field-invalid'); $('name').focus(); return; }
+      if(!name){ $('fName').classList.add('field-invalid'); $('name').focus(); return false; }
       var l=load();
       l[idx]={
         name:name, relationship:$('rel').value,
@@ -163,11 +167,25 @@
         dates:{birthday:$('birthday').value,closing:$('closing').value,anniversary:$('anniversary').value},
         categories:gatherCats(), notes:$('notes').value.trim(), heritage:$('heritage').value.trim()
       };
-      save(l);
+      save(l); return true;
+    }
+    $('saveBtn').addEventListener('click', function(){
+      if(!saveCurrent()) return;
       var t=$('toast'); t.classList.add('show');
       setTimeout(function(){ location.href='list.html'; }, 650);
-    }
-    $('saveBtn').addEventListener('click', doSave);
+    });
+    $('addAnotherBtn').addEventListener('click', function(){
+      if(!saveCurrent()) return;
+      var l=load();
+      if(l.length < planCap()){
+        l.push({name:"",relationship:"Past client",address:{},dates:{},categories:[],notes:"",heritage:""});
+        save(l);
+        location.href="profile.html?i="+(l.length-1);
+      } else {
+        var t=$('toast'); t.innerHTML="\u2713 Saved \u2014 you\u2019ve reached your plan limit"; t.classList.add('show');
+        setTimeout(function(){ location.href='list.html'; }, 900);
+      }
+    });
   })();
   </script>
 </body>

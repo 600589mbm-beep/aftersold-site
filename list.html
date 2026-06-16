@@ -96,6 +96,7 @@
         </select>
         <button class="button button-primary add-btn" id="addBtn" type="button">Add &amp; build profile →</button>
       </div>
+      <p class="capnote" id="capNote" style="margin-top:14px;color:var(--grey);font-size:.9rem"></p>
     </section>
 
     <div class="people" id="people"></div>
@@ -113,6 +114,10 @@
     "use strict";
     var ORDER_EMAIL = "600589mbm@gmail.com";
     var KEY = "aftersold_list";
+    var PLAN_CAPS={"one-month":1,"three-month":3,"ten-month":10,"whole-family":20,"year":12,"keep-in-touch":50,"never-forgotten":125,"letters":125};
+    var PLAN_NAMES={"one-month":"One a Month","three-month":"Three a Month","ten-month":"Ten a Month","whole-family":"The Whole Family","year":"The Year Plan","keep-in-touch":"Keep In Touch","never-forgotten":"Never Forgotten","letters":"AfterSold Letters"};
+    function planKey(){ try{ return localStorage.getItem('aftersold_plan'); }catch(e){ return null; } }
+    function planCap(){ var k=planKey(); return (k&&PLAN_CAPS[k])?PLAN_CAPS[k]:125; }
     var $ = function(id){return document.getElementById(id);};
     function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
     function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
@@ -134,9 +139,14 @@
     }
     function render(){
       var list=load(), wrap=$('people'); wrap.innerHTML="";
-      $('countNum').textContent=list.length;
+      var cap=planCap(), pk=planKey(), pname=(pk&&PLAN_NAMES[pk])?PLAN_NAMES[pk]:null, atCap=list.length>=cap;
+      $('countNum').textContent=list.length+" / "+cap;
       $('tip').hidden = list.length===0;
       var send=$('sendBtn'); send.setAttribute('aria-disabled', list.length? "false":"true");
+      var ab=$('addBtn'); ab.disabled=atCap; ab.style.opacity=atCap?".5":"1"; ab.style.pointerEvents=atCap?"none":"auto";
+      $('capNote').innerHTML = atCap
+        ? "\uD83D\uDD12 You've used all <b>"+cap+"</b> spots on "+(pname?("the "+pname+" plan"):"your plan")+". <a href='index.html#pricing' style='color:var(--red);font-weight:700'>Upgrade for more \u2192</a>"
+        : (pname?("Your plan: <b>"+pname+"</b> \u2014 up to <b>"+cap+"</b> people."):("Up to <b>"+cap+"</b> people on your plan."));
       if(list.length===0){
         var e=document.createElement('div'); e.className="empty";
         e.innerHTML='<div class="big">Your list is empty</div><p>Add your first person above — a past client, your mom, anyone you want to stay top of mind with.</p>';
@@ -165,6 +175,7 @@
       if(!name){ $('newName').classList.add('field-invalid'); $('newName').focus(); return; }
       $('newName').classList.remove('field-invalid');
       var list=load();
+      if(list.length>=planCap()){ render(); return; }
       list.push({name:name, relationship:$('newRel').value, address:{}, dates:{}, categories:[], notes:"", heritage:""});
       save(list);
       // go straight to the new person's profile

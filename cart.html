@@ -386,6 +386,7 @@
       try{
         var lead = {email:$('email').value.trim(), name:$('fname').value.trim(), plan:current, bump:bumpActive(), ts:Date.now()};
         window.__afterSoldLead = lead;
+        try{ localStorage.setItem('aftersold_plan', current); }catch(e){}
         if(FORMSPREE_LEAD.indexOf('REPLACE_ME')===-1){
           var fd = new FormData();
           fd.append('email', lead.email);
