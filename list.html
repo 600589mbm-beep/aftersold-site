@@ -237,7 +237,9 @@
       if($('sendBtn').getAttribute('aria-disabled')==='true') return;
       var sig=sigData();
       if(sig){ try{ var a=document.createElement('a'); a.href=sig; a.download='aftersold-signature.png'; document.body.appendChild(a); a.click(); a.remove(); }catch(e2){} }
-      window.location.href = buildEmail();
+      try{ localStorage.setItem('aftersold_sent', String(Date.now())); }catch(e3){}
+      var ml=document.createElement('a'); ml.href=buildEmail(); document.body.appendChild(ml); ml.click(); ml.remove();
+      setTimeout(function(){ window.location.href='sent.html'; }, 600);
     });
 
     // ---- Signature pad ----

@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your list is on its way — AfterSold</title>
+  <meta name="description" content="Your AfterSold list is in. Here's your personalized year of mailings — written and signed from you.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .sw{max-width:760px;margin:0 auto;padding:34px 22px 90px}
+    .sw-head{text-align:center;margin-bottom:8px}
+    .checkmark{width:66px;height:66px;border-radius:50%;background:#1E6B52;color:#fff;display:grid;place-items:center;margin:0 auto 16px;font-size:2rem;box-shadow:0 8px 22px rgba(30,107,82,.32);animation:pop .5s cubic-bezier(.2,1.6,.4,1)}
+    @keyframes pop{0%{transform:scale(0)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+    .sw-sub{text-align:center;color:var(--grey);max-width:520px;margin:8px auto 0;font-size:1.04rem}
+    .steps-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:26px auto 26px;max-width:520px;color:var(--grey);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .steps-bar .st{display:flex;align-items:center;gap:8px}
+    .steps-bar .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e7dbc6;color:var(--navy);font-family:'Anton',sans-serif}
+    .steps-bar .st.done .dot{background:#1E6B52;color:#fff}
+    .steps-bar .st.active .dot{background:var(--red);color:#fff}
+    .steps-bar .st.active{color:var(--navy)}
+    .steps-bar .bar{flex:1;height:2px;background:#e7dbc6;min-width:22px}
+    .recap{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:22px}
+    @media(max-width:560px){.recap{grid-template-columns:1fr 1fr}}
+    .stat{background:#fff;border:1px solid #ecdfc8;border-radius:14px;padding:16px 14px;text-align:center;box-shadow:0 6px 16px rgba(33,48,63,.07)}
+    .stat .v{font-family:'Anton',sans-serif;font-size:1.5rem;color:var(--navy);line-height:1.1}
+    .stat .v.red{color:var(--red)}
+    .stat .k{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-top:5px}
+    .card{background:#fff;border-radius:18px;padding:26px 24px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
+    .card h2{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);font-size:1.2rem;margin-bottom:4px}
+    .card .muted{color:var(--grey);font-size:.92rem;margin-bottom:18px}
+    .cal-month{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.05em;color:var(--red);font-size:.95rem;margin:18px 0 8px;padding-bottom:6px;border-bottom:2px solid #f1ece2}
+    .cal-month:first-of-type{margin-top:0}
+    .ev{display:flex;align-items:center;gap:13px;padding:10px 0;border-bottom:1px solid #f6f1e8}
+    .ev:last-child{border-bottom:none}
+    .ev .emo{width:38px;height:38px;border-radius:50%;background:var(--cream);display:grid;place-items:center;font-size:1.1rem;flex:none}
+    .ev .when{font-family:'Anton',sans-serif;color:var(--navy);font-size:.95rem;width:62px;flex:none}
+    .ev .what{color:var(--ink);font-size:.93rem}
+    .cal-empty{text-align:center;color:var(--grey);padding:18px 6px}
+    .cal-more{text-align:center;color:var(--grey);font-size:.88rem;margin-top:14px;font-style:italic}
+    .auto-note{background:var(--cream);border:2px dashed var(--gold);border-radius:14px;padding:18px 20px;margin-top:20px}
+    .auto-note strong{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--navy)}
+    .auto-note p{color:var(--grey);font-size:.9rem;margin-top:6px}
+    .endcta{text-align:center;margin-top:26px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .endcta a.ghost{color:var(--grey);text-decoration:none;font-weight:700;font-size:.92rem;padding:13px 18px;border:2px solid #e7dbc6;border-radius:10px}
+    .endcta a.ghost:hover{border-color:var(--red);color:var(--red)}
+    .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--red)}
+  </style>
+</head>
+<body>
+  <div class="announce">✦ <strong>LIST RECEIVED.</strong> WE'LL TAKE IT FROM HERE — SIGNED FROM YOU. ✦</div>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/><path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/></svg></span>AfterSold</a>
+      <a class="back-link" href="list.html" style="margin-left:auto">← Your list</a>
+    </nav>
+  </header>
+
+  <main class="sw">
+    <div class="sw-head">
+      <div class="checkmark" aria-hidden="true">✓</div>
+      <h1 class="stacked-head center"><span class="h-caps">Your list is on its way!</span><span class="h-script">we'll take it from here</span></h1>
+      <p class="sw-sub">Everything below is now automatic — written, signed in your hand, and mailed on schedule. Here's your year of staying remembered.</p>
+    </div>
+
+    <div class="steps-bar" aria-hidden="true">
+      <span class="st done"><span class="dot">✓</span>Checkout</span>
+      <span class="bar"></span>
+      <span class="st done"><span class="dot">✓</span>Build your list</span>
+      <span class="bar"></span>
+      <span class="st active"><span class="dot">✓</span>We mail</span>
+    </div>
+
+    <div class="recap">
+      <div class="stat"><div class="v red" id="rCount">0</div><div class="k">People</div></div>
+      <div class="stat"><div class="v" id="rPieces">0</div><div class="k">Pieces / yr</div></div>
+      <div class="stat"><div class="v" id="rFirst">—</div><div class="k">First mailing</div></div>
+      <div class="stat"><div class="v" id="rSig">—</div><div class="k">Signature</div></div>
+    </div>
+
+    <section class="card">
+      <h2>📬 Your mailing calendar</h2>
+      <p class="muted" id="calLede">The next 12 months, built from the dates and categories you set. Every piece signed from you.</p>
+      <div id="cal"></div>
+      <p class="cal-more" id="calMore" hidden></p>
+      <div class="auto-note">
+        <strong>🖋️ Real handwriting, mailed for you</strong>
+        <p>Each card is produced in pen-on-paper handwriting style with your signature, then mailed first-class on the dates above. You do nothing — just watch the calls come back.</p>
+      </div>
+      <div class="endcta">
+        <a class="ghost" href="list.html">Edit my list</a>
+        <a class="button button-primary" href="index.html">Done</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2026 AfterSold. All rights reserved.</p>
+      <nav aria-label="Legal"><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></nav>
+    </div>
+  </footer>
+
+  <script>
+  (function(){
+    "use strict";
+    var $=function(id){return document.getElementById(id);};
+    function load(){ try{ return JSON.parse(localStorage.getItem('aftersold_list')||'[]'); }catch(e){ return []; } }
+    var PLAN_NAMES={"one-month":"One a Month","three-month":"Three a Month","ten-month":"Ten a Month","whole-family":"The Whole Family","year":"The Year Plan","keep-in-touch":"Keep In Touch","never-forgotten":"Never Forgotten","letters":"AfterSold Letters"};
+    var list=load();
+    var hasSig=false; try{ hasSig=!!localStorage.getItem('aftersold_signature'); }catch(e){}
+    var now=new Date();
+
+    // ---- recap ----
+    $('rCount').textContent=list.length;
+    $('rSig').textContent = hasSig? "✓" : "—";
+    var first=new Date(now.getTime()+7*864e5);
+    $('rFirst').textContent = first.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+
+    // ---- build calendar ----
+    var horizon=new Date(now.getFullYear()+1, now.getMonth(), now.getDate());
+    var events=[];
+    function md(s){ if(!s) return null; var d=new Date(s+'T00:00:00'); return isNaN(d.getTime())?null:{m:d.getMonth(),day:d.getDate()}; }
+    function nextAnnual(x){ if(!x) return null; var y=now.getFullYear(); var e=new Date(y,x.m,x.day); if(e<now) e=new Date(y+1,x.m,x.day); return e; }
+    function seasonal(m,day){ var y=now.getFullYear(); var e=new Date(y,m,day); if(e<now) e=new Date(y+1,m,day); return e; }
+    function monthsOut(n,day){ return new Date(now.getFullYear(), now.getMonth()+n, day); }
+    function add(date,emo,label){ if(date && date>=now && date<=horizon) events.push({d:date,e:emo,l:label}); }
+
+    list.forEach(function(p){
+      var nm=(p.name||"A recipient").split(" ")[0] || p.name || "Recipient";
+      var d=p.dates||{}, cats=p.categories||[];
+      add(nextAnnual(md(d.birthday)), "🎂", "Birthday card — "+nm);
+      add(nextAnnual(md(d.closing)), "🏡", (p.relationship==="Car buyer"?"Purchase":"Home")+" anniversary — "+nm);
+      add(nextAnnual(md(d.anniversary)), "💍", "Anniversary card — "+nm);
+      if(cats.indexOf("Holidays")>-1){ add(seasonal(10,25),"🦃","Thanksgiving — "+nm); add(seasonal(11,12),"🎄","Holiday card — "+nm); }
+      if(cats.indexOf("Local history")>-1){ for(var k=1;k<=3;k++) add(monthsOut(k,15),"📜","Local history letter "+k+" — "+nm); }
+      if(cats.indexOf("Heritage story")>-1){ add(monthsOut(2,10),"🌳","Heritage letter — "+nm); }
+      if(cats.indexOf("Just because")>-1 || cats.indexOf("Thinking of you")>-1){ add(monthsOut(3+(nm.length%6),9),"💌","Thinking of you — "+nm); }
+      if(cats.indexOf("Get well")>-1){ add(monthsOut(1+(nm.length%3),20),"🌷","Get-well card — "+nm); }
+      if(cats.indexOf("Congrats")>-1){ add(monthsOut(2+(nm.length%4),5),"🎉","Congrats card — "+nm); }
+    });
+
+    events.sort(function(a,b){ return a.d-b.d; });
+    $('rPieces').textContent = events.length;
+
+    var cal=$('cal');
+    if(events.length===0){
+      cal.innerHTML='<div class="cal-empty">Add birthdays, closing dates, or categories to each profile and your full year of mailings will appear here. Either way, your first piece goes out within 7 days.</div>';
+    } else {
+      var shown=events.slice(0,60), curMonth="";
+      shown.forEach(function(ev){
+        var mk=ev.d.toLocaleDateString('en-US',{month:'long',year:'numeric'});
+        if(mk!==curMonth){ curMonth=mk; var h=document.createElement('div'); h.className="cal-month"; h.textContent=mk; cal.appendChild(h); }
+        var row=document.createElement('div'); row.className="ev";
+        row.innerHTML='<span class="emo">'+ev.e+'</span><span class="when">'+ev.d.toLocaleDateString('en-US',{month:'short',day:'numeric'})+'</span><span class="what"></span>';
+        row.querySelector('.what').textContent=ev.l;
+        cal.appendChild(row);
+      });
+      if(events.length>60){ var mo=$('calMore'); mo.hidden=false; mo.textContent="+ "+(events.length-60)+" more scheduled this year"; }
+    }
+  })();
+  </script>
+</body>
+</html>
