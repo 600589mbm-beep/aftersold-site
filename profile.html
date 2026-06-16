@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Personal Profile — AfterSold</title>
+  <meta name="description" content="Build a personal profile so every piece AfterSold mails feels personal — never a blast.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pw{max-width:720px;margin:0 auto;padding:30px 22px 130px}
+    .pw-head{text-align:center;margin-bottom:18px}
+    .pw-head .who{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:6px}
+    .pw-head .av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--red));color:#fff;display:grid;place-items:center;font-family:'Anton',sans-serif;font-size:1.05rem}
+    .pw-head .who b{font-family:'Anton',sans-serif;text-transform:uppercase;color:var(--navy);font-size:1.3rem}
+    .sect{background:#fff;border-radius:18px;padding:24px 24px;box-shadow:0 12px 30px rgba(33,48,63,.12);margin-bottom:18px}
+    .sect h2{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);font-size:1.05rem;margin-bottom:3px;display:flex;align-items:center;gap:9px}
+    .sect .muted{color:var(--grey);font-size:.88rem;margin-bottom:16px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .grid3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:14px}
+    @media(max-width:560px){.grid2,.grid3{grid-template-columns:1fr}}
+    .field{margin-bottom:14px}
+    .field:last-child{margin-bottom:0}
+    .field label{display:block;font-weight:700;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--grey);margin-bottom:6px}
+    .field input,.field select,.field textarea{width:100%;padding:12px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.97rem;background:#fff;color:var(--ink)}
+    .field select{background:var(--cream)}
+    .field textarea{min-height:90px;resize:vertical;line-height:1.5}
+    .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red)}
+    .field .hint{font-size:.77rem;color:var(--grey);margin-top:5px}
+    .field-invalid input{border-color:var(--red);background:#fdf3f1}
+    .cats{display:flex;flex-wrap:wrap;gap:10px}
+    .cat{display:flex;align-items:center;gap:8px;border:2px solid #e7dbc6;border-radius:20px;padding:9px 15px;cursor:pointer;font-size:.9rem;color:var(--navy);user-select:none;transition:all .15s}
+    .cat:hover{border-color:var(--gold)}
+    .cat input{accent-color:#1E6B52;width:16px;height:16px;cursor:pointer}
+    .cat.on{background:#f3faf6;border-color:#1E6B52;font-weight:600}
+    .actions{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e7dbc6;box-shadow:0 -8px 24px rgba(33,48,63,.12);padding:13px 18px;display:flex;gap:12px;justify-content:center;align-items:center}
+    .actions a.cancel{color:var(--grey);text-decoration:none;font-weight:700;font-size:.92rem;padding:13px 16px}
+    .actions a.cancel:hover{color:var(--red)}
+    .actions button.save{font-size:1rem;padding:14px 28px;border:none;cursor:pointer}
+    .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--red)}
+    .saved-toast{position:fixed;left:50%;top:18px;transform:translateX(-50%) translateY(-80px);background:#1E6B52;color:#fff;padding:11px 20px;border-radius:30px;font-weight:600;font-size:.92rem;box-shadow:0 10px 26px rgba(30,107,82,.34);opacity:0;transition:transform .35s,opacity .35s;z-index:60}
+    .saved-toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+  </style>
+</head>
+<body>
+  <div class="announce">✦ <strong>PERSONAL PROFILE.</strong> SO NOTHING WE MAIL EVER FEELS LIKE A BLAST. ✦</div>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/><path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/></svg></span>AfterSold</a>
+      <a class="back-link" href="list.html" style="margin-left:auto">← Your list</a>
+    </nav>
+  </header>
+
+  <main class="pw">
+    <div class="pw-head">
+      <h1 class="stacked-head center"><span class="h-caps">Personal profile</span></h1>
+      <div class="who"><span class="av" id="avatar">?</span><b id="whoName">—</b></div>
+    </div>
+
+    <form id="profileForm" novalidate>
+      <section class="sect">
+        <h2>👤 The basics</h2>
+        <p class="muted">Who is this, and how do you know them?</p>
+        <div class="grid2">
+          <div class="field" id="fName"><label for="name">Full name</label><input type="text" id="name" placeholder="Sarah Chen"></div>
+          <div class="field"><label for="rel">Relationship</label>
+            <select id="rel"><option>Past client</option><option>Car buyer</option><option>Family</option><option>Friend</option><option>Other</option></select>
+          </div>
+        </div>
+      </section>
+
+      <section class="sect">
+        <h2>✉️ Mailing address</h2>
+        <p class="muted">Where the cards and letters land.</p>
+        <div class="field"><label for="street">Street address</label><input type="text" id="street" placeholder="412 Oak Street, Apt 2"></div>
+        <div class="grid3">
+          <div class="field"><label for="city">City</label><input type="text" id="city" placeholder="Austin"></div>
+          <div class="field"><label for="state">State</label><input type="text" id="state" placeholder="TX"></div>
+          <div class="field"><label for="zip">ZIP</label><input type="text" id="zip" inputmode="numeric" placeholder="78704"></div>
+        </div>
+      </section>
+
+      <section class="sect">
+        <h2>📅 Key dates</h2>
+        <p class="muted">These set the timing of every piece. Add what you know — leave the rest blank.</p>
+        <div class="grid3">
+          <div class="field"><label for="birthday">Birthday</label><input type="date" id="birthday"></div>
+          <div class="field"><label for="closing">Closing / purchase</label><input type="date" id="closing"></div>
+          <div class="field"><label for="anniversary">Home / wedding anniversary</label><input type="date" id="anniversary"></div>
+        </div>
+      </section>
+
+      <section class="sect">
+        <h2>🎯 Categories to send</h2>
+        <p class="muted">Pick what this person should receive. You can change it anytime.</p>
+        <div class="cats" id="cats"></div>
+      </section>
+
+      <section class="sect">
+        <h2>💌 Preferences, notes &amp; heritage</h2>
+        <p class="muted">The little details that make it feel handwritten — not a mail-merge.</p>
+        <div class="field"><label for="notes">What do they love? Tone notes?</label><textarea id="notes" placeholder="Loves gardening and the Cowboys. Keep it warm and casual."></textarea></div>
+        <div class="field"><label for="heritage">Heritage / story (for VIP letters)</label><textarea id="heritage" placeholder="Irish family on her mother's side, grew up in Boston, grandparents emigrated in 1952…"></textarea><p class="hint">Optional — powers Local History &amp; Heritage letters for your best people.</p></div>
+      </section>
+    </form>
+  </main>
+
+  <div class="actions">
+    <a class="cancel" href="list.html">Cancel</a>
+    <button class="button button-primary save" id="saveBtn" type="button">Save &amp; back to list →</button>
+  </div>
+
+  <div class="saved-toast" id="toast">✓ Profile saved</div>
+
+  <script>
+  (function(){
+    "use strict";
+    var KEY="aftersold_list";
+    var CATS=["Birthday","Holidays","Anniversary","Local history","Heritage story","Just because","Get well","Congrats","Thinking of you"];
+    var $=function(id){return document.getElementById(id);};
+    function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
+    function save(l){ try{ localStorage.setItem(KEY, JSON.stringify(l)); }catch(e){} }
+    function initials(n){ return (n||"?").trim().split(/\s+/).map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase()||"?"; }
+
+    var idx = parseInt(new URLSearchParams(location.search).get('i'),10);
+    var list = load();
+    if(isNaN(idx) || idx<0 || idx>=list.length){ location.replace('list.html'); return; }
+    var p = list[idx];
+    p.address=p.address||{}; p.dates=p.dates||{}; p.categories=p.categories||[];
+
+    // build category chips
+    var catsWrap=$('cats');
+    CATS.forEach(function(c){
+      var on = p.categories.indexOf(c)!==-1;
+      var label=document.createElement('label'); label.className="cat"+(on?" on":"");
+      label.innerHTML='<input type="checkbox" value="'+c+'"'+(on?" checked":"")+'> '+c;
+      label.querySelector('input').addEventListener('change', function(){ label.classList.toggle('on', this.checked); });
+      catsWrap.appendChild(label);
+    });
+
+    // hydrate fields
+    $('name').value=p.name||""; $('rel').value=p.relationship||"Past client";
+    $('street').value=p.address.street||""; $('city').value=p.address.city||""; $('state').value=p.address.state||""; $('zip').value=p.address.zip||"";
+    $('birthday').value=p.dates.birthday||""; $('closing').value=p.dates.closing||""; $('anniversary').value=p.dates.anniversary||"";
+    $('notes').value=p.notes||""; $('heritage').value=p.heritage||"";
+    function refreshHead(){ $('whoName').textContent=$('name').value.trim()||"New person"; $('avatar').textContent=initials($('name').value); }
+    refreshHead();
+    $('name').addEventListener('input', function(){ refreshHead(); $('fName').classList.remove('field-invalid'); });
+
+    function gatherCats(){ return Array.prototype.filter.call(document.querySelectorAll('#cats input'), function(c){return c.checked;}).map(function(c){return c.value;}); }
+
+    function doSave(){
+      var name=$('name').value.trim();
+      if(!name){ $('fName').classList.add('field-invalid'); $('name').focus(); return; }
+      var l=load();
+      l[idx]={
+        name:name, relationship:$('rel').value,
+        address:{street:$('street').value.trim(),city:$('city').value.trim(),state:$('state').value.trim(),zip:$('zip').value.trim()},
+        dates:{birthday:$('birthday').value,closing:$('closing').value,anniversary:$('anniversary').value},
+        categories:gatherCats(), notes:$('notes').value.trim(), heritage:$('heritage').value.trim()
+      };
+      save(l);
+      var t=$('toast'); t.classList.add('show');
+      setTimeout(function(){ location.href='list.html'; }, 650);
+    }
+    $('saveBtn').addEventListener('click', doSave);
+  })();
+  </script>
+</body>
+</html>

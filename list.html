@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Build Your List — AfterSold</title>
+  <meta name="description" content="Build your AfterSold list — add every person you want to stay remembered by. We mail, signed from you.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .lw{max-width:780px;margin:0 auto;padding:30px 22px 140px}
+    .lw-head{text-align:center;margin-bottom:6px}
+    .lw-sub{text-align:center;color:var(--grey);max-width:540px;margin:6px auto 0;font-size:1.02rem}
+    .steps-bar{display:flex;align-items:center;justify-content:center;gap:8px;margin:24px auto 28px;max-width:520px;color:var(--grey);font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase}
+    .steps-bar .st{display:flex;align-items:center;gap:8px}
+    .steps-bar .dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e7dbc6;color:var(--navy);font-family:'Anton',sans-serif}
+    .steps-bar .st.done .dot{background:#1E6B52;color:#fff}
+    .steps-bar .st.active .dot{background:var(--red);color:#fff}
+    .steps-bar .st.active{color:var(--navy)}
+    .steps-bar .bar{flex:1;height:2px;background:#e7dbc6;min-width:18px}
+    .card{background:#fff;border-radius:18px;padding:24px 24px;box-shadow:0 12px 30px rgba(33,48,63,.12)}
+    .card h2{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.03em;color:var(--navy);font-size:1.15rem;margin-bottom:4px}
+    .card .muted{color:var(--grey);font-size:.92rem;margin-bottom:16px}
+    .addrow{display:flex;gap:10px;flex-wrap:wrap}
+    .addrow input,.addrow select{padding:13px 14px;border:2px solid #e7dbc6;border-radius:10px;font-family:'Inter',sans-serif;font-size:.97rem;background:#fff;color:var(--ink)}
+    .addrow input{flex:2;min-width:180px}
+    .addrow select{flex:1;min-width:150px;background:var(--cream)}
+    .addrow input:focus,.addrow select:focus{outline:none;border-color:var(--red)}
+    .addrow .add-btn{flex:none;border:none;cursor:pointer}
+    .field-invalid{border-color:var(--red)!important;background:#fdf3f1!important}
+    .people{margin-top:22px;display:grid;gap:13px}
+    .person{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid #ecdfc8;border-left:4px solid var(--gold);border-radius:14px;padding:15px 17px;box-shadow:0 6px 16px rgba(33,48,63,.07);transition:transform .2s,box-shadow .2s}
+    .person:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(33,48,63,.13)}
+    .person.ready{border-left-color:#1E6B52}
+    .av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--navy),var(--red));color:#fff;display:grid;place-items:center;font-family:'Anton',sans-serif;font-size:1rem;flex:none}
+    .pmeta{flex:1;min-width:0}
+    .pmeta b{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.02em;color:var(--navy);font-size:1rem;display:block}
+    .pmeta small{color:var(--grey);font-size:.84rem}
+    .badge2{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-top:5px}
+    .badge2.ready{background:rgba(30,107,82,.12);color:#1E6B52}
+    .badge2.todo{background:#fff4f1;color:var(--red)}
+    .pactions{display:flex;gap:8px;flex:none}
+    .btn-sm{font-family:'Inter',sans-serif;font-weight:700;font-size:.82rem;padding:9px 13px;border-radius:9px;border:2px solid #e7dbc6;background:#fff;color:var(--navy);text-decoration:none;cursor:pointer;white-space:nowrap}
+    .btn-sm:hover{border-color:var(--red);color:var(--red)}
+    .btn-edit{background:var(--navy);color:#fff;border-color:var(--navy)}
+    .btn-edit:hover{background:var(--red);border-color:var(--red);color:#fff}
+    .empty{text-align:center;color:var(--grey);padding:30px 10px}
+    .empty .big{font-family:'Pacifico',cursive;color:var(--red);font-size:1.5rem;margin-bottom:8px}
+    .sendbar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid #e7dbc6;box-shadow:0 -8px 24px rgba(33,48,63,.12);padding:13px 18px;display:flex;align-items:center;gap:14px;justify-content:center}
+    .sendbar .count{font-weight:700;color:var(--navy);font-size:.95rem}
+    .sendbar .count b{font-family:'Anton',sans-serif;font-size:1.2rem;color:var(--red)}
+    .sendbar a.send{font-size:1rem;padding:14px 26px}
+    .sendbar a.send[aria-disabled="true"]{opacity:.45;pointer-events:none}
+    .tip{display:flex;gap:9px;background:var(--cream);border:2px dashed var(--gold);border-radius:12px;padding:13px 16px;margin-top:18px;color:var(--grey);font-size:.88rem}
+    .back-link{color:var(--grey);text-decoration:none;font-size:.9rem}.back-link:hover{color:var(--red)}
+  </style>
+</head>
+<body>
+  <div class="announce">✦ <strong>STEP 3 OF 3.</strong> BUILD YOUR LIST — WE MAIL THE REST. ✦</div>
+  <header class="site-header">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/><path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/></svg></span>AfterSold</a>
+      <a class="back-link" href="thanks.html" style="margin-left:auto">← Back</a>
+    </nav>
+  </header>
+
+  <main class="lw">
+    <div class="lw-head">
+      <h1 class="stacked-head center"><span class="h-caps">Build your list</span><span class="h-script">the people you'll never forget</span></h1>
+      <p class="lw-sub">Add everyone you want to stay remembered by. Give each person a quick profile — address, key dates, what they love — and we handle every mailing, signed from you.</p>
+    </div>
+
+    <div class="steps-bar" aria-hidden="true">
+      <span class="st done"><span class="dot">✓</span>Checkout</span>
+      <span class="bar"></span>
+      <span class="st active"><span class="dot">2</span>Build your list</span>
+      <span class="bar"></span>
+      <span class="st"><span class="dot">3</span>We mail</span>
+    </div>
+
+    <section class="card">
+      <h2>➕ Add a person</h2>
+      <p class="muted">Start with a name. You'll add their full profile next.</p>
+      <div class="addrow">
+        <input type="text" id="newName" placeholder="e.g. Sarah Chen" autocomplete="off" aria-label="Person's name">
+        <select id="newRel" aria-label="Relationship">
+          <option value="Past client">Past client</option>
+          <option value="Car buyer">Car buyer</option>
+          <option value="Family">Family</option>
+          <option value="Friend">Friend</option>
+          <option value="Other">Other</option>
+        </select>
+        <button class="button button-primary add-btn" id="addBtn" type="button">Add &amp; build profile →</button>
+      </div>
+    </section>
+
+    <div class="people" id="people"></div>
+
+    <div class="tip" id="tip" hidden>💡 Tip: a profile is <strong>&nbsp;Ready&nbsp;</strong> once it has a mailing address and at least one key date or category. Don't worry about perfection — paste what you have and we'll tidy it.</div>
+  </main>
+
+  <div class="sendbar">
+    <span class="count"><b id="countNum">0</b> on your list</span>
+    <a class="button button-primary send" id="sendBtn" href="#" aria-disabled="true">Send my list to AfterSold →</a>
+  </div>
+
+  <script>
+  (function(){
+    "use strict";
+    var ORDER_EMAIL = "600589mbm@gmail.com";
+    var KEY = "aftersold_list";
+    var $ = function(id){return document.getElementById(id);};
+    function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"[]"); }catch(e){ return []; } }
+    function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
+    function initials(n){ return (n||"?").trim().split(/\s+/).map(function(w){return w[0]||"";}).slice(0,2).join("").toUpperCase()||"?"; }
+    function isReady(p){
+      var a = p.address||{};
+      var hasAddr = a.street && a.city && a.state && a.zip;
+      var hasDate = p.dates && (p.dates.birthday||p.dates.closing||p.dates.anniversary);
+      var hasCat = p.categories && p.categories.length;
+      return !!(hasAddr && (hasDate || hasCat));
+    }
+    function summary(p){
+      var bits=[]; var a=p.address||{};
+      if(a.city||a.state) bits.push([a.city,a.state].filter(Boolean).join(", "));
+      var d=p.dates||{}; var nd=[d.birthday&&"birthday",d.closing&&"closing",d.anniversary&&"anniversary"].filter(Boolean).length;
+      if(nd) bits.push(nd+" date"+(nd>1?"s":""));
+      if(p.categories&&p.categories.length) bits.push(p.categories.length+" categor"+(p.categories.length>1?"ies":"y"));
+      return bits.join(" · ") || "No details yet";
+    }
+    function render(){
+      var list=load(), wrap=$('people'); wrap.innerHTML="";
+      $('countNum').textContent=list.length;
+      $('tip').hidden = list.length===0;
+      var send=$('sendBtn'); send.setAttribute('aria-disabled', list.length? "false":"true");
+      if(list.length===0){
+        var e=document.createElement('div'); e.className="empty";
+        e.innerHTML='<div class="big">Your list is empty</div><p>Add your first person above — a past client, your mom, anyone you want to stay top of mind with.</p>';
+        wrap.appendChild(e); return;
+      }
+      list.forEach(function(p,i){
+        var ready=isReady(p);
+        var el=document.createElement('div'); el.className="person"+(ready?" ready":"");
+        el.innerHTML =
+          '<span class="av">'+initials(p.name)+'</span>'+
+          '<div class="pmeta"><b></b><small></small><br><span class="badge2 '+(ready?"ready":"todo")+'">'+(ready?"✓ Ready to mail":"Needs details")+'</span></div>'+
+          '<div class="pactions"><a class="btn-sm btn-edit" href="profile.html?i='+i+'">Edit profile →</a><button class="btn-sm" data-rm="'+i+'" type="button">Remove</button></div>';
+        el.querySelector('.pmeta b').textContent = p.name + (p.relationship? "":"");
+        el.querySelector('.pmeta small').textContent = (p.relationship||"")+" · "+summary(p);
+        wrap.appendChild(el);
+      });
+      Array.prototype.forEach.call(wrap.querySelectorAll('[data-rm]'), function(btn){
+        btn.addEventListener('click', function(){
+          var i=+btn.getAttribute('data-rm'); var l=load();
+          if(confirm('Remove '+(l[i]?l[i].name:'this person')+' from your list?')){ l.splice(i,1); save(l); render(); }
+        });
+      });
+    }
+    function addPerson(){
+      var name=$('newName').value.trim();
+      if(!name){ $('newName').classList.add('field-invalid'); $('newName').focus(); return; }
+      $('newName').classList.remove('field-invalid');
+      var list=load();
+      list.push({name:name, relationship:$('newRel').value, address:{}, dates:{}, categories:[], notes:"", heritage:""});
+      save(list);
+      // go straight to the new person's profile
+      window.location.href = "profile.html?i="+(list.length-1);
+    }
+    $('addBtn').addEventListener('click', addPerson);
+    $('newName').addEventListener('keydown', function(e){ if(e.key==="Enter"){ addPerson(); } });
+    $('newName').addEventListener('input', function(){ this.classList.remove('field-invalid'); });
+
+    function buildEmail(){
+      var list=load();
+      var lines=["AfterSold — My list ("+list.length+" "+(list.length===1?"person":"people")+")",""];
+      list.forEach(function(p,i){
+        var a=p.address||{}, d=p.dates||{};
+        lines.push((i+1)+") "+p.name+" — "+(p.relationship||""));
+        lines.push("   Address: "+([a.street,a.city,a.state,a.zip].filter(Boolean).join(", ")||"(none)"));
+        lines.push("   Dates: birthday "+(d.birthday||"—")+"; closing/purchase "+(d.closing||"—")+"; anniversary "+(d.anniversary||"—"));
+        lines.push("   Categories: "+((p.categories&&p.categories.length)?p.categories.join(", "):"(none)"));
+        if(p.notes) lines.push("   Notes: "+p.notes);
+        if(p.heritage) lines.push("   Heritage/story: "+p.heritage);
+        lines.push("");
+      });
+      lines.push("Sent from the AfterSold list builder.");
+      return "mailto:"+ORDER_EMAIL+"?subject="+encodeURIComponent("AfterSold list — "+list.length+" people")+"&body="+encodeURIComponent(lines.join("\n"));
+    }
+    $('sendBtn').addEventListener('click', function(e){
+      e.preventDefault();
+      if(load().length===0) return;
+      window.location.href = buildEmail();
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>
