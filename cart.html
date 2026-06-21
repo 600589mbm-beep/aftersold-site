@@ -170,23 +170,10 @@
             <p id="bumpSub">—</p>
           </span>
         </label>
-        <div class="urgency">
-          <span class="pulse" aria-hidden="true"></span>
-          <p><b>Onboarding for June is filling up.</b> Order today and your first mailing is scheduled within 7 days.</p>
-        </div>
         <div class="proof">
-          <div class="stars" aria-label="4.9 out of 5 stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
-          <p class="proof-count"><b>4.9/5</b> from <b>1,200+</b> agents, dealers &amp; families who never miss a date</p>
-          <div class="tlist">
-            <div class="tcard">
-              <p>"A past buyer called me after getting his one-year anniversary card — listed his rental with me the same week. AfterSold paid for itself in a single email."</p>
-              <div class="who"><span class="av">DR</span><span><b>Dana R.</b><small>Realtor · Austin, TX</small></span><span class="verified"><span class="vchk">✓</span>Verified</span></div>
-            </div>
-            <div class="tcard">
-              <p>"My buyers get a card on their purchase anniversary signed from me. Three trade-ins came back to my store last quarter. Nobody else on the lot does this."</p>
-              <div class="who"><span class="av">MT</span><span><b>Marcus T.</b><small>Sales Mgr · Auto Dealer, OH</small></span><span class="verified"><span class="vchk">✓</span>Verified</span></div>
-            </div>
-          </div>
+          <p style="font-size:.9rem;color:var(--grey);background:#fff;border:1px solid #ecdfc8;border-radius:12px;padding:14px 16px;margin:0">
+            <strong style="color:var(--navy)">Founder-run — your list is handled personally.</strong> AfterSold is brand new, so we'd rather earn real reviews than invent them. Be one of our first customers and we'll ask for your honest feedback after your first mailing.
+          </p>
         </div>
       </section>
       <section class="cart-card" aria-label="Checkout">
@@ -231,10 +218,6 @@
       </section>
     </div>
   </main>
-  <div class="live-toast" id="liveToast" role="status" aria-live="polite">
-    <span class="lt-ic" aria-hidden="true">✉</span>
-    <span class="lt-txt"><b id="ltName">—</b><small id="ltMeta">—</small></span>
-  </div>
   <div class="sticky-buy" aria-hidden="true">
     <span class="sb-info"><small>Total today</small><b id="stickyTotal">—</b></span>
     <a class="button button-primary" id="stickyBtn" href="#">Secure Checkout →</a>
@@ -432,42 +415,6 @@
         h2.style.color = "var(--grey)";
       }
     });
-    var ACTS = [
-      ["Dana R.","Never Forgotten · Austin, TX"],
-      ["Marcus T.","Keep In Touch · Columbus, OH"],
-      ["Maria L.","The Whole Family · Denver, CO"],
-      ["James P.","AfterSold Letters · Tampa, FL"],
-      ["Grace W.","One a Month · Portland, OR"],
-      ["Robert K.","Never Forgotten · Nashville, TN"],
-      ["Linda M.","Keep In Touch · Charlotte, NC"],
-      ["Carlos D.","AfterSold Letters · Phoenix, AZ"],
-      ["Emily S.","Three a Month · Madison, WI"],
-      ["Tyler B.","Never Forgotten · Kansas City, MO"],
-      ["Priya N.","The Whole Family · San Jose, CA"],
-      ["Frank G.","Keep In Touch · Pittsburgh, PA"],
-      ["Aisha J.","Ten a Month · Atlanta, GA"],
-      ["Derek H.","AfterSold Letters · Boise, ID"],
-      ["Sofia V.","The Year Plan · Albuquerque, NM"],
-      ["Nathan C.","Never Forgotten · Omaha, NE"],
-      ["Rachel F.","Keep In Touch · Louisville, KY"],
-      ["Vincent A.","Three a Month · Providence, RI"],
-      ["Hannah O.","One a Month · Des Moines, IA"],
-      ["Greg P.","Never Forgotten · Spokane, WA"],
-      ["Monica E.","The Whole Family · Sarasota, FL"],
-      ["Brandon L.","Keep In Touch · Tulsa, OK"],
-      ["Olivia T.","AfterSold Letters · Richmond, VA"],
-      ["Sam W.","Ten a Month · Salt Lake City, UT"]
-    ];
-    for(var zi=ACTS.length-1; zi>0; zi--){ var zj=Math.floor(Math.random()*(zi+1)); var zt=ACTS[zi]; ACTS[zi]=ACTS[zj]; ACTS[zj]=zt; }
-    var toast = $('liveToast'), ai = 0;
-    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    function showToast(){
-      var a = ACTS[ai % ACTS.length]; ai++;
-      $('ltName').textContent = a[0]; $('ltMeta').textContent = a[1];
-      toast.classList.add('show');
-      setTimeout(function(){ toast.classList.remove('show'); }, 4500);
-    }
-    if(!reduce){ setTimeout(function(){ showToast(); setInterval(showToast, 11000); }, 3500); }
     (function(){
       var pf = document.querySelector('.proof'); if(!pf) return;
       var rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

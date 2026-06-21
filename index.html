@@ -48,6 +48,10 @@
     .mail-sign{color:#CE6E58}
     .qcard-red{background:#CE6E58}
     .gift-strip{border-color:#E0906C}
+    /* true trust strip on the hero (above the fold) */
+    .trust-strip{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 20px;margin:20px auto 0;max-width:640px;padding:0}
+    .trust-strip li{font-size:13px;color:#FFF1E8;position:relative;padding-left:18px}
+    .trust-strip li::before{content:"✓";position:absolute;left:0;color:#FFE9D8;font-weight:700}
   </style>
 </head>
 <body>
@@ -88,9 +92,16 @@
           <span class="h-script">who matter most…</span>
           <span class="h-caps h-caps-sm">we'll mail the card for you.</span>
         </h1>
-        <p class="hero-sub">AfterSold sends real, handwritten cards and personalized letters to your family and friends — birthdays, anniversaries, holidays, just-because — signed in your name, right on time, every time.</p>
+        <p class="hero-sub">Never miss the moments that matter — we mail a real handwritten-style card in your name, timed to arrive for the day that counts.</p>
           <a class="button button-invert button-lg" href="#plans">Order Now</a>
         <p class="hero-note">Set your list once. We remember every date so you don't have to.</p>
+        <ul class="trust-strip" aria-label="What's included">
+          <li>Signed in your name</li>
+          <li>No AfterSold branding on the envelope</li>
+          <li>Month-to-month — cancel anytime</li>
+          <li>Postage &amp; delivery included</li>
+          <li>Secure checkout via Stripe</li>
+        </ul>
 
         <div class="mail-card mail-tilt-l" aria-hidden="true">
           <p class="mail-script">Happy birthday, Grandma! Saving you a candle for next time I'm home. Love you.</p>

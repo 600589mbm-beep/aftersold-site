@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AfterSold for Business — Plans That Keep You Unforgettable</title>
+<title>AfterSold for Business — Done-for-You Client Cards That Drive Referrals</title>
 <meta name="description" content="Done-for-you handwritten cards and personalized letters, sent in your name, that keep past clients thinking of you — and sending you referrals. Plans from $79/mo for real estate agents.">
 <link rel="canonical" href="https://600589mbm-beep.github.io/aftersold-site/business.html">
 <meta property="og:type" content="website">
@@ -92,6 +92,10 @@
     font-size:15px;color:var(--ink);margin:18px auto 0;max-width:560px;
   }
   .roi b{font-weight:600}
+  /* true trust strip (above the fold) */
+  .trust-strip{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:9px 22px;margin:22px auto 0;max-width:780px;padding:0}
+  .trust-strip li{font-size:13px;color:var(--ink-soft);position:relative;padding-left:18px}
+  .trust-strip li::before{content:"✓";position:absolute;left:0;color:var(--gold);font-weight:700}
 
   /* toggle */
   .toggle-row{display:flex;justify-content:center;align-items:center;gap:14px;margin:34px 0 8px}
@@ -294,9 +298,16 @@
 
   <section class="hero">
     <div class="eyebrow">For real estate agents</div>
-    <h1>Stay <em>unforgettable.</em></h1>
+    <h1>Handwritten cards that bring past clients back as <em>referrals.</em></h1>
     <p>Done-for-you cards, sent in your name, that keep past clients thinking of you — and sending you referrals.</p>
     <p class="roi">The average referral commission runs <b>$7,000–$12,000</b>. A full year of staying top of mind costs less than one.</p>
+    <ul class="trust-strip" aria-label="What's included">
+      <li>Signed in your name</li>
+      <li>No AfterSold branding on the envelope</li>
+      <li>Month-to-month — cancel anytime</li>
+      <li>Postage &amp; delivery included</li>
+      <li>Secure checkout via Stripe</li>
+    </ul>
 
     <div class="toggle-row">
       <span class="toggle-lbl on" id="lbl-mo">Monthly</span>
