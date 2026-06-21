@@ -42,3 +42,11 @@ CREATE TABLE IF NOT EXISTS sends (
   sent_at       TEXT DEFAULT (datetime('now')),
   UNIQUE(recipient_id, occasion, year)
 );
+
+-- One-time launch-discount eligibility, keyed by a SALTED HASH of the visitor IP
+-- (no raw IP stored). first_seen + 60 days = lockout; deadline = end of their 2-min window.
+CREATE TABLE IF NOT EXISTS promo_offers (
+  ip_hash     TEXT PRIMARY KEY,
+  first_seen  INTEGER NOT NULL,   -- epoch ms, first time the IP saw the offer
+  deadline    INTEGER NOT NULL    -- epoch ms, end of their 2-minute window
+);

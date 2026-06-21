@@ -36,6 +36,9 @@ export default {
       if (url.pathname === "/api/test-send" && request.method === "POST") {
         return await handleTestSend(request, env, cors, url);
       }
+      if (url.pathname === "/api/promo") {
+        return await handlePromo(request, env, cors);
+      }
       return json({ error: "not found" }, 404, cors);
     } catch (err) {
       return json({ error: String(err && err.message || err) }, 500, cors);
@@ -233,6 +236,55 @@ function renderCard(occ, row, sender) {
     ${sig}
   </div>
 </body></html>`;
+}
+
+/* ───────────────────────── launch promo (one-time 50% off, per-IP) ───────────────────────── */
+
+const PROMO_WINDOW_MS = 2 * 60 * 1000;             // each visitor gets ONE 2-minute window
+const PROMO_LOCKOUT_MS = 60 * 24 * 60 * 60 * 1000; // then that IP can't get it again for 60 days
+
+// GET /api/promo — real, enforceable launch discount. The visitor's IP is stored
+// only as a salted SHA-256 hash (no raw IP retained). Refreshing does NOT reset the
+// clock; once the 2-minute window passes, the IP is locked out of the discount for 60
+// days. Returns { eligible, msLeft } — msLeft is the time remaining in their window.
+async function handlePromo(request, env, cors) {
+  const ip = request.headers.get("CF-Connecting-IP")
+    || (request.headers.get("X-Forwarded-For") || "").split(",")[0].trim()
+    || "0.0.0.0";
+  const ipHash = await sha256(ip + "|" + (env.PROMO_SALT || "aftersold-launch"));
+  const now = Date.now();
+
+  const row = await env.DB.prepare(
+    "SELECT first_seen, deadline FROM promo_offers WHERE ip_hash = ?"
+  ).bind(ipHash).first();
+
+  let eligible, deadline;
+  if (!row) {                                       // first time this IP sees the offer
+    deadline = now + PROMO_WINDOW_MS;
+    await env.DB.prepare(
+      "INSERT INTO promo_offers (ip_hash, first_seen, deadline) VALUES (?,?,?)"
+    ).bind(ipHash, now, deadline).run();
+    eligible = true;
+  } else {
+    const firstSeen = Number(row.first_seen), dl = Number(row.deadline);
+    if (now < dl) {                                 // still inside their original window
+      eligible = true; deadline = dl;
+    } else if (now < firstSeen + PROMO_LOCKOUT_MS) { // window passed → locked 60 days
+      eligible = false; deadline = dl;
+    } else {                                        // 60 days elapsed → grant a fresh window
+      deadline = now + PROMO_WINDOW_MS;
+      await env.DB.prepare(
+        "UPDATE promo_offers SET first_seen = ?, deadline = ? WHERE ip_hash = ?"
+      ).bind(now, deadline, ipHash).run();
+      eligible = true;
+    }
+  }
+  return json({ eligible, msLeft: eligible ? Math.max(0, deadline - now) : 0 }, 200, cors);
+}
+
+async function sha256(s) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map((b) => b.toString(16).padStart(2, "0")).join("");
 }
 
 /* ───────────────────────── helpers ───────────────────────── */

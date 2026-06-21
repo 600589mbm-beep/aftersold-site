@@ -87,3 +87,17 @@ The `sends` table dedupes so each occasion mails once per recipient per year.
 Non-date categories (Just because, Thinking of you, Get well, Congrats, Local
 history, Heritage) are stored but not yet auto-scheduled — add rules in
 `occasionsFor()` when ready.
+
+## Launch promo (one-time 50% off, enforced by IP)
+`GET /api/promo` powers the cart's countdown. The visitor's IP is stored only as a
+**salted SHA-256 hash** (no raw IP retained) in the `promo_offers` table. Each IP gets
+**one 2-minute window**; refreshing does not reset it, and once the window passes the IP
+is **locked out of the discount for 60 days**. Returns `{ eligible, msLeft }`.
+
+- Optional secret for the hash:  `wrangler secret put PROMO_SALT`  (any random string;
+  a local value lives in `.dev.vars`). Falls back to a default if unset.
+- The 50%-off Stripe `dealLink`s already exist in `cart.html` PLANS; they're used only
+  when `/api/promo` says the visitor is eligible.
+- **To turn the promo on**, set `WORKER_URL` in **`cart.html`** (and `list.html`) to your
+  deployed Worker URL. Until then the cart stays full price — no fake timer.
+- Window/lockout are tunable: `PROMO_WINDOW_MS` / `PROMO_LOCKOUT_MS` in `worker.js`.

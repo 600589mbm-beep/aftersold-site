@@ -143,6 +143,7 @@
     </nav>
   </header>
   <main class="cart-wrap">
+    <div class="deal-bar" id="dealBar" hidden>⚡ <strong>LAUNCH OFFER: 50% OFF</strong> — locked in if you check out within <span id="dealClock">2:00</span>. One-time offer — then it's full price.</div>
     <div class="cart-head">
       <h1 class="stacked-head center"><span class="h-caps">You're one step away</span><span class="h-script">from never being forgotten</span></h1>
     </div>
@@ -266,13 +267,32 @@
     var $ = function(id){return document.getElementById(id);};
     var money = function(n){return "$"+n.toLocaleString("en-US");};
     function fmtMoney(n){ return (n%1===0) ? "$"+n.toLocaleString("en-US") : "$"+n.toFixed(2); }
-    var DEAL_KEY='asd_deal_deadline';
-    var DEADLINE=(function(){ try{ var v=localStorage.getItem(DEAL_KEY), now=Date.now(); if(v){return +v;} var d=now+5*60*1000; localStorage.setItem(DEAL_KEY,String(d)); return d; }catch(e){ return Date.now()+5*60*1000; } })();
-    /* Launch promo OFF — no fake/resetting countdown. To run a REAL dated promo,
-       set a single shared end date and return Date.now() < that timestamp. */
-    function dealActive(){ return false; }
+    // ---- Launch promo: one-time 50% off, ENFORCED server-side by IP (2-min window, 60-day lockout).
+    //      Set WORKER_URL to your deployed Worker to turn it on. Until then checkout stays full price
+    //      (fail-closed — never a fake/resetting timer). ----
+    var WORKER_URL = "https://aftersold-mailer.YOURNAME.workers.dev";
+    var PROMO = { eligible:false, deadline:0 };
+    function dealActive(){ return PROMO.eligible && Date.now() < PROMO.deadline; }
     function sumAmt(n, per, deal){ per=per||""; return deal ? '<s class="price-was">'+fmtMoney(n)+per+'</s> '+fmtMoney(n*0.5)+per : fmtMoney(n)+per; }
-    function tickDeal(){ var bar=document.getElementById('dealBar'); if(!bar) return; var nd=(PLANS[current]&&PLANS[current].noDeal); var left=DEADLINE-Date.now(); if(left>0 && !nd){ bar.removeAttribute('hidden'); var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000); document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec; } else { var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden',''); if(wasShown && left<=0 && !nd){ recalc(); } } }
+    function tickDeal(){
+      var bar=document.getElementById('dealBar'); if(!bar) return;
+      var nd=(PLANS[current]&&PLANS[current].noDeal), left=PROMO.deadline-Date.now();
+      if(PROMO.eligible && left>0 && !nd){
+        bar.removeAttribute('hidden');
+        var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000);
+        document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec;
+      } else {
+        var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden','');
+        if(wasShown && left<=0){ recalc(); }
+      }
+    }
+    function loadPromo(){
+      if(WORKER_URL.indexOf('YOURNAME')!==-1) return;  // Worker not deployed yet -> no discount (honest default)
+      fetch(WORKER_URL.replace(/\/$/,'')+'/api/promo', {headers:{'Accept':'application/json'}})
+        .then(function(r){ return r.ok ? r.json() : null; })
+        .then(function(d){ if(d && d.eligible && d.msLeft>0){ PROMO.eligible=true; PROMO.deadline=Date.now()+d.msLeft; recalc(); tickDeal(); } })
+        .catch(function(){});
+    }
     var ORDER_EMAIL = "600589mbm@gmail.com";
     var placeholderMode = false;
     function isPlaceholder(l){ return !l || l.charAt(0) === "#"; }
@@ -429,6 +449,7 @@
       els.forEach(function(c){ io.observe(c); });
     })();
     render(new URLSearchParams(location.search).get('plan'));
+    loadPromo();
     tickDeal(); setInterval(tickDeal, 1000);
   })();
   </script>
