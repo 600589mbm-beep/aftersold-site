@@ -64,7 +64,7 @@
     <div class="sw-head">
       <div class="checkmark" aria-hidden="true">✓</div>
       <h1 class="stacked-head center"><span class="h-caps">Your list is on its way!</span><span class="h-script">we'll take it from here</span></h1>
-      <p class="sw-sub">Everything below is now automatic — written, signed in your hand, and mailed on schedule. Here's your year of staying remembered.</p>
+      <p class="sw-sub">Here's the plan we'll mail for you — written, signed in your name, on the dates below. We'll email to confirm before anything goes out.</p>
     </div>
 
     <div class="steps-bar" aria-hidden="true">
@@ -89,7 +89,7 @@
       <p class="cal-more" id="calMore" hidden></p>
       <div class="auto-note">
         <strong>🖋️ Real handwriting, mailed for you</strong>
-        <p>Each card is produced in pen-on-paper handwriting style with your signature, then mailed first-class on the dates above. You do nothing — just watch the calls come back.</p>
+        <p>Each card is produced in real-pen handwriting style with your signature and mailed on the dates above. We'll send a recap as pieces go out.</p>
       </div>
       <div class="endcta">
         <a class="ghost" href="list.html">Edit my list</a>
@@ -149,7 +149,7 @@
 
     var cal=$('cal');
     if(events.length===0){
-      cal.innerHTML='<div class="cal-empty">Add birthdays, closing dates, or categories to each profile and your full year of mailings will appear here. Either way, your first piece goes out within 7 days.</div>';
+      cal.innerHTML='<div class="cal-empty">Add birthdays, closing dates, or categories to each profile and your full year of mailings will appear here. Either way, we\'ll confirm your schedule by email.</div>';
     } else {
       var shown=events.slice(0,60), curMonth="";
       shown.forEach(function(ev){

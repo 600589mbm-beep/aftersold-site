@@ -143,7 +143,6 @@
     </nav>
   </header>
   <main class="cart-wrap">
-    <div class="deal-bar" id="dealBar" hidden>⚡ <strong>FLASH DEAL: 50% OFF EVERYTHING</strong> — locked in if you check out within <span id="dealClock">5:00</span>. Discount auto-applies at Stripe checkout.</div>
     <div class="cart-head">
       <h1 class="stacked-head center"><span class="h-caps">You're one step away</span><span class="h-script">from never being forgotten</span></h1>
     </div>
@@ -181,7 +180,7 @@
         <div class="field" id="emailField">
           <label for="email">Email address</label>
           <input type="email" id="email" name="email" autocomplete="email" inputmode="email" placeholder="you@business.com" required>
-          <p class="hint">Your receipt, list-builder link, and monthly recaps go here. No spam, ever.</p>
+          <p class="hint">Your receipt and list-builder link go here. No spam, ever.</p>
         </div>
         <div class="field">
           <label for="fname">First name <span style="font-weight:400;text-transform:none;color:var(--grey)">(so we can sign it from you)</span></label>
@@ -201,7 +200,7 @@
         <div class="trust">
           <p>📆 Month-to-month billing — cancel anytime, in one email</p>
           <p>✍️ Every piece signed from you, never from us</p>
-          <p>📬 First mailing scheduled within 7 days</p>
+          <p>📬 We'll confirm your mailing schedule by email</p>
         </div>
         <div class="guarantee-mini">
           <strong>🛡️ Love-It Guarantee</strong>
@@ -250,7 +249,7 @@
         feats:["Up to 60 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
         bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/14A00j3Vhc0h9Qta2IbV60A",dealLink:"https://buy.stripe.com/9B63cv2Rd0hz1jXdeUbV60B"}},
       "never-forgotten":{name:"Never Forgotten",num:399,per:"/mo",badge:"Most Popular",noDeal:true,link:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",dealLink:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",
-        feats:["Up to 100 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","New-closing welcome card within 48 hours","Quarterly strategy call"],
+        feats:["Up to 100 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","New-closing welcome card, sent promptly","Quarterly strategy call"],
         bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L",dealLink:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L"}},
       "letters":{name:"AfterSold Letters",num:699,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRmcN5ezVd4l8Mp0s8bV60G",dealLink:"https://buy.stripe.com/28EfZh1N91lDbYB8YEbV60I",
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
@@ -269,7 +268,9 @@
     function fmtMoney(n){ return (n%1===0) ? "$"+n.toLocaleString("en-US") : "$"+n.toFixed(2); }
     var DEAL_KEY='asd_deal_deadline';
     var DEADLINE=(function(){ try{ var v=localStorage.getItem(DEAL_KEY), now=Date.now(); if(v){return +v;} var d=now+5*60*1000; localStorage.setItem(DEAL_KEY,String(d)); return d; }catch(e){ return Date.now()+5*60*1000; } })();
-    function dealActive(){ return Date.now() < DEADLINE; }
+    /* Launch promo OFF — no fake/resetting countdown. To run a REAL dated promo,
+       set a single shared end date and return Date.now() < that timestamp. */
+    function dealActive(){ return false; }
     function sumAmt(n, per, deal){ per=per||""; return deal ? '<s class="price-was">'+fmtMoney(n)+per+'</s> '+fmtMoney(n*0.5)+per : fmtMoney(n)+per; }
     function tickDeal(){ var bar=document.getElementById('dealBar'); if(!bar) return; var nd=(PLANS[current]&&PLANS[current].noDeal); var left=DEADLINE-Date.now(); if(left>0 && !nd){ bar.removeAttribute('hidden'); var m=Math.floor(left/60000), sec=Math.floor((left%60000)/1000); document.getElementById('dealClock').textContent=m+":"+(sec<10?"0":"")+sec; } else { var wasShown=!bar.hasAttribute('hidden'); bar.setAttribute('hidden',''); if(wasShown && left<=0 && !nd){ recalc(); } } }
     var ORDER_EMAIL = "600589mbm@gmail.com";
@@ -411,7 +412,7 @@
       if(validEmail(this.value.trim())){
         $('emailField').classList.remove('invalid');
         var h2 = $('emailField').querySelector('.hint');
-        h2.textContent = "Your receipt, list-builder link, and monthly recaps go here. No spam, ever.";
+        h2.textContent = "Your receipt and list-builder link go here. No spam, ever.";
         h2.style.color = "var(--grey)";
       }
     });
