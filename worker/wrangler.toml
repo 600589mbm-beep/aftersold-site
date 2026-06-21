@@ -1,0 +1,22 @@
+name = "aftersold-mailer"
+main = "src/worker.js"
+compatibility_date = "2026-06-01"
+
+# Daily at 14:00 UTC (~morning in the US). The cron scans the list and mails
+# any card whose occasion (birthday / anniversary / holiday) lands today.
+[triggers]
+crons = ["0 14 * * *"]
+
+# D1 database that stores orders, recipients, and a send-log (dedupe).
+# Create it once with:  wrangler d1 create aftersold
+# then paste the returned database_id below.
+[[d1_databases]]
+binding = "DB"
+database_name = "aftersold"
+database_id = "2f1b7300-daed-4ba1-9c9f-e01a0cbd27ab"
+
+[vars]
+# Origin allowed to POST the list (your GitHub Pages site). Not a secret.
+ALLOWED_ORIGIN = "https://600589mbm-beep.github.io"
+# Set DOCUPOST_API_KEY as a SECRET, never here:
+#   wrangler secret put DOCUPOST_API_KEY

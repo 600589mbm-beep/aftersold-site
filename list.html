@@ -154,7 +154,9 @@
   (function(){
     "use strict";
     var ORDER_EMAIL = "600589mbm@gmail.com";
-    var WORKER_URL = "https://aftersold-mailer.YOURNAME.workers.dev"; // set to your deployed Worker URL to enable automation
+    // Automation: deploy worker/ (see worker/README.md), then replace YOURNAME
+    // with your workers.dev subdomain. Until then the site falls back to email.
+    var WORKER_URL = "https://aftersold-mailer.YOURNAME.workers.dev";
     var KEY = "aftersold_list";
     var PLAN_CAPS={"one-month":1,"three-month":3,"ten-month":10,"whole-family":20,"year":12,"keep-in-touch":50,"never-forgotten":125,"letters":125};
     var PLAN_NAMES={"one-month":"One a Month","three-month":"Three a Month","ten-month":"Ten a Month","whole-family":"The Whole Family","year":"The Year Plan","keep-in-touch":"Keep In Touch","never-forgotten":"Never Forgotten","letters":"AfterSold Letters"};
