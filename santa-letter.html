@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Letter from Santa Claus — AfterSold</title>
+<meta name="description" content="A special letter from Santa Claus, delivered with love — by AfterSold.">
+<link rel="canonical" href="https://600589mbm-beep.github.io/aftersold-site/santa-letter.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="A Letter from Santa Claus — AfterSold">
+<meta property="og:description" content="A warm, personal letter from Santa — the kind of card that sits on the mantel all season long.">
+<meta property="og:url" content="https://600589mbm-beep.github.io/aftersold-site/santa-letter.html">
+<meta property="og:site_name" content="AfterSold">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='14' width='56' height='38' rx='5' fill='%23C0392B'/%3E%3Cpath d='M6 18l26 20 26-20' fill='none' stroke='%23FAF6F0' stroke-width='4' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='40' r='5' fill='%23D4A24E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Pacifico&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* ── Santa Letter page extras ── */
+
+.santa-hero {
+  background: linear-gradient(160deg, #C0392B 0%, #922B21 60%, #1a2a3a 100%);
+  color: #fff;
+  text-align: center;
+  padding: 80px 24px 100px;
+  position: relative;
+  overflow: hidden;
+}
+.santa-hero .eyebrow { color: #FFE3B3; }
+.santa-hero h1 .h-caps { font-size: clamp(2rem, 5.5vw, 4rem); }
+.santa-hero h1 .h-script { font-size: clamp(1.8rem, 5vw, 3.6rem); color: #FFE3B3; margin: 6px 0; }
+.santa-hero .hero-sub { color: #fbe9e5; max-width: 560px; margin: 20px auto 0; }
+
+/* Snowflakes */
+.flake {
+  position: absolute;
+  color: rgba(255,255,255,0.6);
+  font-size: 1.6rem;
+  pointer-events: none;
+  animation: drift 12s linear infinite;
+}
+.flake-1 { top: 5%; left: 10%; font-size: 1.1rem; animation-duration: 14s; }
+.flake-2 { top: 12%; right: 14%; font-size: 2rem; animation-duration: 10s; animation-delay: -3s; }
+.flake-3 { top: 30%; left: 5%; font-size: 1.4rem; animation-duration: 16s; animation-delay: -6s; }
+.flake-4 { top: 8%; left: 50%; font-size: 1rem; animation-duration: 11s; animation-delay: -2s; }
+.flake-5 { top: 20%; right: 5%; font-size: 1.6rem; animation-duration: 13s; animation-delay: -8s; }
+@keyframes drift {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+  50%  { opacity: 0.4; }
+  100% { transform: translateY(60px) rotate(30deg); opacity: 0.7; }
+}
+
+/* Letter section */
+.letter-section {
+  background: var(--cream);
+  padding: 64px 24px 80px;
+}
+.letter-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Airmail border top */
+.letter-airmail-border {
+  height: 14px;
+  border-radius: 12px 12px 0 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #C0392B 0 28px,
+    #fff 28px 42px,
+    #21303f 42px 70px,
+    #fff 70px 84px
+  );
+}
+
+/* The letter card */
+.letter-card {
+  background: #fffef8;
+  border: 1px solid #e4d8c4;
+  border-top: none;
+  border-radius: 0 0 16px 16px;
+  padding: 48px 52px 52px;
+  box-shadow: 0 18px 50px rgba(33,48,63,.16);
+  position: relative;
+}
+
+/* Watermark */
+.letter-card::before {
+  content: "🎄";
+  position: absolute;
+  font-size: 9rem;
+  opacity: 0.05;
+  right: 32px;
+  bottom: 32px;
+  pointer-events: none;
+  line-height: 1;
+}
+
+.letter-date {
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 28px;
+}
+.letter-salutation {
+  font-family: 'Pacifico', cursive;
+  font-size: 1.55rem;
+  color: var(--red);
+  margin-bottom: 22px;
+}
+.letter-body {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.letter-body p { margin-bottom: 18px; }
+.letter-body p:last-child { margin-bottom: 0; }
+.letter-ps {
+  font-size: .92rem;
+  color: var(--grey);
+  font-style: italic;
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px dashed #ddd0bc;
+}
+
+/* Signature block */
+.letter-sign-block { margin-top: 30px; }
+.letter-sign-label {
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--grey);
+  margin-bottom: 6px;
+}
+.letter-sign {
+  font-family: 'Pacifico', cursive;
+  font-size: 2rem;
+  color: var(--red);
+  line-height: 1.2;
+}
+.letter-sign-title {
+  font-size: .85rem;
+  color: var(--grey);
+  margin-top: 4px;
+}
+
+/* Wax seal */
+.seal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 14px rgba(192,57,43,.4);
+  margin-top: 28px;
+}
+
+/* CTA */
+.santa-cta {
+  background: var(--navy);
+  color: #fff;
+  text-align: center;
+  padding: 64px 24px;
+}
+.santa-cta .stacked-head .h-caps { color: #fff; font-size: clamp(1.4rem,3.2vw,2.2rem); }
+.santa-cta .stacked-head .h-script { color: var(--gold); }
+.santa-cta p { color: #b8c4cf; max-width: 560px; margin: 0 auto 28px; }
+
+/* Nav override */
+.announce { background: #7B241C; }
+.announce strong { color: #FFE3B3; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<div class="announce">🎅 <strong>A SPECIAL DELIVERY FROM THE NORTH POLE.</strong> BECAUSE REAL LETTERS MAKE PEOPLE FEEL REMEMBERED. ❄️</div>
+
+<header class="site-header">
+  <nav class="nav" aria-label="Primary">
+    <a class="brand" href="index.html">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 64 64" width="26" height="26" focusable="false" aria-hidden="true">
+          <rect x="4" y="14" width="56" height="38" rx="5" fill="currentColor"/>
+          <path d="M6 18l26 20 26-20" fill="none" stroke="#FAF6F0" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+      </span>
+      AfterSold
+    </a>
+    <div class="nav-links">
+      <a href="index.html#plans">Plans</a>
+      <a href="index.html#occasions">Occasions</a>
+      <a href="index.html#how">How it works</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="business.html">For Business</a>
+    </div>
+    <a class="button button-primary nav-cta" href="index.html#plans">Order Now</a>
+  </nav>
+</header>
+
+<main id="main">
+
+  <!-- Hero -->
+  <section class="santa-hero">
+    <span class="flake flake-1" aria-hidden="true">❄</span>
+    <span class="flake flake-2" aria-hidden="true">❅</span>
+    <span class="flake flake-3" aria-hidden="true">❆</span>
+    <span class="flake flake-4" aria-hidden="true">❄</span>
+    <span class="flake flake-5" aria-hidden="true">❅</span>
+    <span class="star star-1" aria-hidden="true">✦</span>
+    <span class="star star-2" aria-hidden="true">✺</span>
+
+    <div class="hero-inner">
+      <p class="eyebrow">✉️ Special Delivery — North Pole</p>
+      <h1>
+        <span class="h-caps">A letter from</span>
+        <span class="h-script">Santa Claus</span>
+        <span class="h-caps h-caps-sm">hand-delivered with love</span>
+      </h1>
+      <p class="hero-sub">Some letters are worth holding onto. This is one of them.</p>
+    </div>
+  </section>
+
+  <!-- The Letter -->
+  <section class="letter-section">
+    <div class="letter-wrap">
+
+      <div class="letter-airmail-border" aria-hidden="true"></div>
+
+      <div class="letter-card">
+
+        <p class="letter-date">🎄 Christmas Eve &nbsp;&middot;&nbsp; The North Pole</p>
+
+        <p class="letter-salutation">Dear Friend,</p>
+
+        <div class="letter-body">
+          <p>The elves have finally gone to bed, the last ribbon has been tied, and I’ve settled into my favourite chair by the fire — the one that smells of pine and cinnamon and very old leather — to write to you before the night begins.</p>
+          <p>I write every year, you know. Not just to children. I write to the grandmother who knitted mittens for every person on her street without telling anyone. To the neighbour who shovelled three driveways at dawn before his own. To the friend who showed up with soup, and to the parent who held it together on the days they thought they couldn’t.</p>
+          <p>I see more than gifts under trees. I see the quiet acts — the card tucked into a lunch box, the letter slipped into a mailbox, the phone call on the birthday that almost got away. I see the people who make other people feel remembered.</p>
+          <p>That is the real magic. Not the sleigh, not the reindeer (though Rudolph would disagree). It’s the moment someone holds something in their hands and thinks: <em>they thought of me</em>.</p>
+          <p>This year, I hope you felt that. And I hope someone you love did too.</p>
+          <p>Merry Christmas, dear friend. The world is kinder because of people like you.</p>
+        </div>
+
+        <div class="letter-sign-block">
+          <p class="letter-sign-label">With all the warmth of the North Pole,</p>
+          <p class="letter-sign">Santa Claus</p>
+          <p class="letter-sign-title">Father Christmas &middot; Kris Kringle &middot; St. Nicholas<br>Chief Elf Officer, North Pole</p>
+        </div>
+
+        <div class="seal" aria-label="Wax seal" aria-hidden="true">🎅</div>
+
+        <p class="letter-ps">
+          <strong>P.S.</strong> — If you’d like to send a real letter like this one to someone you love — signed in your name, arriving right on time — <a href="index.html#plans" style="color:var(--red)">AfterSold can mail it for you</a>. Because nobody ever pinned a text message to the fridge.
+        </p>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="santa-cta">
+    <div class="section-inner narrow">
+      <h2 class="stacked-head center">
+        <span class="h-caps">Send a real letter this season</span>
+        <span class="h-script">signed from you</span>
+      </h2>
+      <p>AfterSold mails real handwritten-style cards and letters to the people you love — birthdays, anniversaries, holidays — timed to arrive right when it counts. Set your list once. We do the rest.</p>
+      <a class="button button-invert button-lg" href="index.html#plans">Order Now</a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p>&copy; 2026 AfterSold. All rights reserved.</p>
+    <nav aria-label="Legal">
+      <a href="business.html">For Business</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
