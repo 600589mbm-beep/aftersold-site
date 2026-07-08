@@ -23,6 +23,8 @@
     btn.setAttribute('aria-expanded', open ? 'true' : 'false');
     btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     links.classList.toggle('open', open);
+    var hdr = document.querySelector('.site-header');
+    if (hdr) hdr.classList.toggle('menu-open', open);
   }
   btn.addEventListener('click', function () {
     setOpen(btn.getAttribute('aria-expanded') !== 'true');
