@@ -53,11 +53,6 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
   .nav-links.open{display:flex}
   .nav-links a{padding:12px 24px;font-size:1rem}
 }
-@media(max-width:380px){
-  .nav{gap:8px;padding:12px 14px}
-  .brand{font-size:1.1rem;gap:7px}
-  .nav-cta{font-size:.75rem;padding:9px 13px;letter-spacing:.04em}
-}
 
 /* Buttons */
 .button{display:inline-block;font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:1rem;padding:14px 34px;border-radius:10px;text-decoration:none;transition:transform .15s ease, box-shadow .15s ease}
@@ -67,6 +62,11 @@ body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);background:var(--
 .button-outline{border:2px solid var(--navy);color:var(--navy)}
 .button-lg{font-size:1.2rem;padding:18px 46px}
 .nav-cta{font-size:.85rem;padding:11px 20px}
+@media(max-width:380px){
+  .nav{gap:8px;padding:12px 14px}
+  .brand{font-size:1.1rem;gap:7px}
+  .nav-cta{font-size:.75rem;padding:9px 13px;letter-spacing:.04em}
+}
 
 /* Stars */
 .star{position:absolute;color:var(--gold);font-size:2.2rem;opacity:.95;pointer-events:none;text-shadow:0 2px 6px rgba(0,0,0,.15)}
