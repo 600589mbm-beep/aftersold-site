@@ -192,7 +192,7 @@
         <div class="total-row"><span class="lbl">Total today</span><span class="amt" id="totalAmt">—</span></div>
         <p class="renew-note" id="renewNote">Then billed monthly. Cancel anytime.</p>
         <a class="button button-primary checkout-btn" id="checkoutBtn" href="#" role="button">Proceed to Secure Checkout →</a>
-        <p class="renew-note" id="payNote" style="display:none;text-align:center;margin-top:9px">We'll email you a secure payment link to finish — usually within the hour.</p>
+        <p class="renew-note" id="payNote" style="display:none;text-align:center;margin-top:9px">This plan checks out by email: send the pre-filled order email and we'll reply with a secure Stripe payment link.</p>
         <div class="pay-secure">🔒 256-bit encrypted · powered by <b>Stripe</b></div>
         <div class="cardrow">
           <span>We accept</span>
@@ -210,8 +210,8 @@
         <div class="next-steps">
           <h3>What happens right after checkout</h3>
           <ol>
-            <li>You get a 2-minute form to build your list — names, addresses, big dates.</li>
-            <li>Pick categories for each person (birthdays, holidays, heritage…).</li>
+            <li>Stripe emails your receipt instantly.</li>
+            <li>Within the day, we email your 2-minute list builder — names, addresses, big dates, categories.</li>
             <li>We write, sign, and mail. You get a recap of every piece sent.</li>
           </ol>
         </div>
@@ -231,36 +231,55 @@
   <script>
   (function(){
     "use strict";
+    // ---- All live Stripe Payment Links in ONE place. To change a link, edit it here. ----
+    var LINKS = {
+      oneMo:"https://buy.stripe.com/aFabIVdhWdX46Qn0TB6AM0k",   oneYr:"https://buy.stripe.com/28EeV70va2em8Yv8m36AM0l",
+      threeMo:"https://buy.stripe.com/dRmbIV91G8CK6Qn6dV6AM0m", threeYr:"https://buy.stripe.com/bJe5kxb9Og5c6QneKr6AM0n",
+      tenMo:"https://buy.stripe.com/fZu9AN6Ty1ai8YvgSz6AM0o",   tenYr:"https://buy.stripe.com/bJe6oBdhWcT01w3byf6AM0p",
+      wholeMo:"https://buy.stripe.com/5kQ4gtcdS8CKb6D9q76AM0q", wholeYr:"https://buy.stripe.com/bJe14hb9O4mu6Qn9q76AM0r",
+      year:"https://buy.stripe.com/bJe3cp1zeaKS5MjdGn6AM0s",
+      santa:"https://buy.stripe.com/7sY3cpgu87yGdeLfOv6AM0t",
+      helloMo:"https://buy.stripe.com/cNi4gt91G3iq3Eb31J6AM0u?prefilled_promo_code=HELLO19",
+      helloYr:"https://buy.stripe.com/fZu3cp4Lq06eeiPfOv6AM0v",
+      kitMo:"https://buy.stripe.com/fZuaERem03iq8Yv59R6AM0w",   kitYr:"https://buy.stripe.com/6oUcMZfq4cT0gqX9q76AM0x",   kitGift:"https://buy.stripe.com/bJe7sF0vaaKSdeL1XF6AM0D",
+      nfMo:"https://buy.stripe.com/5kQ6oB91G1aib6DdGn6AM0y",    nfYr:"https://buy.stripe.com/8x200d2Di3iqb6Dbyf6AM0z",    nfGift:"https://buy.stripe.com/dRmaER7XC7yGfmTeKr6AM0E",
+      lettersMo:"https://buy.stripe.com/28EbIV7XCbOW1w359R6AM0A", lettersYr:"https://buy.stripe.com/6oU7sFb9O3iq2A7aub6AM0B",
+      concierge:"https://buy.stripe.com/14AfZbfq42em0rZaub6AM0C"
+    };
     var PLANS = {
-      "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/bJe8wP0J56FXaUx6QwbV600",dealLink:"https://buy.stripe.com/cNi00j9fB6FXd2F5MsbV60f",
+      "santa-letter":{name:"Santa Letter",num:5,per:"",badge:"Holiday Special",noDeal:true,oneTime:true,link:LINKS.santa,dealLink:LINKS.santa,
+        feats:["Personalized letter from Santa, signed & sealed","Good List sticker, keepsake photo & Santa Dollar included","Mailed on official North Pole stationery, before Christmas","One-time $5 — postage included, no subscription, ever"]},
+      "one-month":{name:"One a Month",num:12,per:"/mo",badge:"Family Plan",link:LINKS.oneMo,dealLink:LINKS.oneMo,
         feats:["1 card or letter every month","Any category, any person","Signed from you"],
-        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/7sY4gzcrN0hz3s5deUbV608",dealLink:"https://buy.stripe.com/28E8wPbnJ4xPd2Fgr6bV60n"}},
-      "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:"https://buy.stripe.com/dRmcN577tfcte6J6QwbV601",dealLink:"https://buy.stripe.com/8x2dR9ajF4xPgeRcaQbV60g",
+        bump:{type:"annual",num:120,save:"Save $24",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.oneYr,dealLink:LINKS.oneYr}},
+      "three-month":{name:"Three a Month",num:29,per:"/mo",badge:"Most Loved",link:LINKS.threeMo,dealLink:LINKS.threeMo,
         feats:["3 cards or letters every month","Mix categories across your list","Birthdays scheduled automatically"],
-        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/28E3cvdvRc0hgeR4IobV609",dealLink:"https://buy.stripe.com/28E9ATezV2pH1jXb6MbV60o"}},
-      "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/00wcN53Vhc0hbYB8YEbV602",dealLink:"https://buy.stripe.com/7sYaEXbnJ3tL2o15MsbV60h",
+        bump:{type:"annual",num:290,save:"Save $58",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.threeYr,dealLink:LINKS.threeYr}},
+      "ten-month":{name:"Ten a Month",num:79,per:"/mo",badge:"Family Plan",link:LINKS.tenMo,dealLink:LINKS.tenMo,
         feats:["10 cards or letters every month","Covers the whole extended family","Holiday season handled"],
-        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/dRm4gz9fB3tLbYBgr6bV60a",dealLink:"https://buy.stripe.com/28E28r3VhaWd3s5a2IbV60p"}},
-      "whole-family":{name:"The Whole Family",num:139,per:"/mo",badge:"Family Plan",link:"https://buy.stripe.com/dRmaEXfDZc0he6J4IobV60u",dealLink:"https://buy.stripe.com/bJe5kDcrN0hz0fT6QwbV60w",
+        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.tenYr,dealLink:LINKS.tenYr}},
+      "whole-family":{name:"The Whole Family",num:139,per:"/mo",badge:"Family Plan",link:LINKS.wholeMo,dealLink:LINKS.wholeMo,
         feats:["Up to 20 people, fully managed","Letters, cards + heritage stories","Never miss a date again"],
-        bump:{type:"annual",num:1390,save:"Save $278",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/4gM7sLbnJ1lDgeR8YEbV60v",dealLink:"https://buy.stripe.com/3cIfZh1N9d4l5AdeiYbV60x"}},
-      "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:"https://buy.stripe.com/3cI8wP2Rdggx6Eh7UAbV604",dealLink:"https://buy.stripe.com/8x26oH9fBd4l3s54IobV60j",
+        bump:{type:"annual",num:1390,save:"Save $278",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.wholeYr,dealLink:LINKS.wholeYr}},
+      "year":{name:"The Year Plan",num:119,per:"/yr",badge:"Best Value",link:LINKS.year,dealLink:LINKS.year,
         feats:["Every birthday & anniversary covered for a full year","Up to 12 big days, scheduled once","Never forget that big day again"]},
-      "keep-in-touch":{name:"Keep In Touch",num:169,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/6oU6oH1N95BTbYB0s8bV60y",dealLink:"https://buy.stripe.com/aFadR9gI31lDe6JdeUbV60z",
+      "keep-in-touch":{name:"Keep In Touch",num:169,per:"/mo",badge:"Business Plan",link:LINKS.kitMo,dealLink:LINKS.kitMo,annual:{num:1690,link:LINKS.kitYr},
         feats:["Up to 60 past clients","6 card touchpoints per client, per year","Anniversary + holiday campaigns","Monthly recap report"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/14A00j3Vhc0h9Qta2IbV60A",dealLink:"https://buy.stripe.com/9B63cv2Rd0hz1jXdeUbV60B"}},
-      "never-forgotten":{name:"Never Forgotten",num:399,per:"/mo",badge:"Most Popular",noDeal:true,link:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",dealLink:"https://buy.stripe.com/9B6eVdcrNggx2o14IobV60K",
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:LINKS.kitGift,dealLink:LINKS.kitGift}},
+      "never-forgotten":{name:"Never Forgotten",num:399,per:"/mo",badge:"Most Popular",noDeal:true,link:LINKS.nfMo,dealLink:LINKS.nfMo,annual:{num:3990,link:LINKS.nfYr},
         feats:["Up to 100 past clients","9 touchpoints per client, per year","Birthdays + spring home-value card","Custom branded designs","New-closing welcome card, sent promptly","Quarterly strategy call"],
-        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L",dealLink:"https://buy.stripe.com/aFa5kDcrN6FX6Eh3EkbV60L"}},
-      "letters":{name:"AfterSold Letters",num:699,per:"/mo",badge:"Business Plan",link:"https://buy.stripe.com/dRmcN5ezVd4l8Mp0s8bV60G",dealLink:"https://buy.stripe.com/28EfZh1N91lDbYB8YEbV60I",
+        bump:{type:"onetime",num:59,save:"Most added",title:"Add a Local History closing gift - $59",sub:"A 3-letter series about your client's new home & neighborhood, mailed over their first 3 months. The gift they frame.",link:LINKS.nfGift,dealLink:LINKS.nfGift}},
+      "letters":{name:"AfterSold Letters",num:699,per:"/mo",badge:"Business Plan",link:LINKS.lettersMo,dealLink:LINKS.lettersMo,
         feats:["Everything in Never Forgotten","Personalized letters, not just cards","Local History series for new closings","Recipient profiles","Heritage VIP letters for top clients"],
-        bump:{type:"annual",num:6990,save:"Save $1,398",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:"https://buy.stripe.com/5kQ3cvcrN1lD8MpdeUbV60H",dealLink:"https://buy.stripe.com/9B68wPcrNggxfaN4IobV60J"}},
-      "hello-again":{name:"Hello Again",num:79,per:"/mo",badge:"Business Plan",link:"#",dealLink:"#",
-        feats:["Up to 30 past clients","6 card touchpoints per client, per year","Holiday, closing anniversary & seasonal cards","Sent in your branding, fully done-for-you","Quarterly recap report"]},
-      "closing-concierge":{name:"Closing Concierge",num:79,per:"/closing",badge:"Add-on",noDeal:true,link:"#",dealLink:"#",
+        bump:{type:"annual",num:6990,save:"Save $1,398",title:"Pay yearly - get 2 months free",sub:"Lock today's rate for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.lettersYr,dealLink:LINKS.lettersYr}},
+      "hello-again":{name:"Hello Again",num:79,per:"/mo",badge:"Business Plan",link:LINKS.helloMo,dealLink:LINKS.helloMo,intro:{today:19},
+        feats:["Up to 30 past clients","6 card touchpoints per client, per year","Holiday, closing anniversary & seasonal cards","Sent in your branding, fully done-for-you","Quarterly recap report"],
+        bump:{type:"annual",num:790,save:"Save $158",title:"Pay yearly - get 2 months free",sub:"Lock today's price for a full year. Billed once, renews yearly. Cancel anytime.",link:LINKS.helloYr,dealLink:LINKS.helloYr}},
+      "closing-concierge":{name:"Closing Concierge",num:79,per:"/closing",badge:"Add-on",noDeal:true,oneTime:true,link:LINKS.concierge,dealLink:LINKS.concierge,
         feats:["Premium welcome package per new closing","Handwritten note + local guide + move-in gift","Delivered the week they get the keys","Adds onto any plan"]}
     };
     var GROUPS = [
+      ["Holiday Special",["santa-letter"]],
       ["For Family & Friends",["one-month","three-month","ten-month","whole-family","year"]],
       ["For Business (Realtors & Dealers)",["hello-again","keep-in-touch","never-forgotten","letters","closing-concierge"]]
     ];
@@ -315,12 +334,20 @@
       sel.appendChild(og);
     });
     var current = "three-month";
+    var annualBilling = false;  // true when ?billing=annual applies to a plan with a separate annual price
     function bumpActive(){ var b = $('bumpChk'); return !$('bumpBox').hasAttribute('hidden') && b.checked; }
     function recalc(){
       var p = PLANS[current], b = p.bump, on = bumpActive(), deal = dealActive() && !p.noDeal;
       var f = deal ? 0.5 : 1;
       var baseTotal, per, renew, link, dealLink;
-      if(on && b.type === "annual"){
+      var intro = false; // Hello Again: first month $19 (auto-applied promo code)
+      if(annualBilling && p.annual){
+        baseTotal = p.annual.num; per = "/yr"; link = p.annual.link; dealLink = p.annual.link;
+        renew = "Billed yearly. Renews yearly. Cancel anytime.";
+        $('sumPlanLbl').textContent = p.name + " (annual)";
+        $('sumPlanAmt').innerHTML = sumAmt(p.annual.num, "/yr", deal);
+        $('sumBumpLine').style.display = "none";
+      } else if(on && b.type === "annual"){
         baseTotal = b.num; per = "/yr"; link = b.link; dealLink = b.dealLink;
         renew = "Billed yearly. Renews yearly. Cancel anytime.";
         $('sumPlanLbl').textContent = p.name + " (annual)";
@@ -336,20 +363,28 @@
         $('sumBumpLine').style.display = "flex";
       } else {
         baseTotal = p.num; per = p.per; link = p.link; dealLink = p.dealLink;
-        renew = p.per === "/yr" ? "Billed yearly. Renews yearly. Cancel anytime." : "Then billed monthly. Cancel anytime.";
-        $('sumPlanLbl').textContent = p.name;
-        $('sumPlanAmt').innerHTML = sumAmt(p.num, p.per, deal);
+        intro = !!(p.intro && !deal);
+        if(p.oneTime){
+          renew = p.per === "/closing" ? "One-time charge per closing. No subscription." : "One-time purchase. No subscription, no renewal.";
+        } else if(intro){
+          renew = "First month " + fmtMoney(p.intro.today) + " with code HELLO19 (applied at checkout), then " + fmtMoney(p.num) + p.per + ". Cancel anytime.";
+        } else {
+          renew = p.per === "/yr" ? "Billed yearly. Renews yearly. Cancel anytime." : "Then billed monthly. Cancel anytime.";
+        }
+        $('sumPlanLbl').textContent = p.name + (intro ? " (first month offer)" : "");
+        $('sumPlanAmt').innerHTML = intro ? '<s class="price-was">'+fmtMoney(p.num)+p.per+'</s> '+fmtMoney(p.intro.today)+' first month' : sumAmt(p.num, p.per, deal);
         $('sumBumpLine').style.display = "none";
       }
+      var headBase = (annualBilling && p.annual) ? fmtMoney(p.annual.num)+'<span>/yr</span>' : fmtMoney(p.num)+'<span>'+p.per+'</span>';
       $('planPrice').innerHTML = deal
         ? '<s class="price-was">'+fmtMoney(p.num)+'</s> '+fmtMoney(p.num*f)+'<span>'+p.per+'</span> <span class="deal-tag">50% OFF</span>'
-        : fmtMoney(p.num)+'<span>'+p.per+'</span>';
-      var totalNum = baseTotal * f;
+        : headBase;
+      var totalNum = intro ? p.intro.today : baseTotal * f;
       $('totalAmt').innerHTML = deal
         ? fmtMoney(totalNum)+(per||"")+' <s class="price-was">'+fmtMoney(baseTotal)+(per||"")+'</s>'
-        : fmtMoney(totalNum)+(per||"");
+        : (intro ? fmtMoney(totalNum)+' <s class="price-was">'+fmtMoney(baseTotal)+'</s>' : fmtMoney(totalNum)+(per||""));
       $('renewNote').textContent = renew;
-      $('stickyTotal').textContent = fmtMoney(totalNum)+(per||"");
+      $('stickyTotal').textContent = fmtMoney(totalNum)+(intro ? "" : (per||""));
       var chosen = deal ? (dealLink || link) : link;
       placeholderMode = isPlaceholder(chosen);
       var href = placeholderMode ? buildMailto() : chosen;
@@ -359,6 +394,7 @@
       $('stickyBtn').textContent   = placeholderMode ? "Reserve My Plan →" : (deal ? "Claim 50% Off →" : "Secure Checkout →");
       $('payNote').style.display   = placeholderMode ? "block" : "none";
     }
+    var wantAnnual = new URLSearchParams(location.search).get('billing') === 'annual';
     function render(id){
       if(!PLANS[id]) id = "three-month";
       current = id;
@@ -370,18 +406,20 @@
       p.feats.forEach(function(f){ var li = document.createElement('li'); li.textContent = f; ul.appendChild(li); });
       var box = $('bumpBox'), chk = $('bumpChk');
       chk.checked = false; box.classList.remove('on');
-      if(p.bump){
+      annualBilling = !!(wantAnnual && p.annual);
+      if(p.bump && !annualBilling){
         box.removeAttribute('hidden');
         $('bumpTag').textContent = p.bump.save;
         $('bumpTitle').textContent = p.bump.title;
         $('bumpSub').textContent = p.bump.sub;
+        if(wantAnnual && p.bump.type === "annual"){ chk.checked = true; box.classList.add('on'); }
       } else {
         box.setAttribute('hidden','');
       }
       sel.value = id;
       recalc();
       tickDeal();
-      try{ history.replaceState(null,'','cart.html?plan='+id); }catch(e){}
+      try{ history.replaceState(null,'','cart.html?plan='+id+((annualBilling||(wantAnnual&&p.bump&&p.bump.type==="annual"))?'&billing=annual':'')); }catch(e){}
     }
     sel.addEventListener('change', function(){ render(this.value); });
     $('bumpChk').addEventListener('change', function(){
@@ -424,7 +462,18 @@
       if(placeholderMode){
         e.preventDefault();
         window.location.href = buildMailto();
+        return;
       }
+      // Pass the email to Stripe Checkout (prefilled) + a reference so orders map back to a plan.
+      e.preventDefault();
+      var base = $('checkoutBtn').getAttribute('href');
+      var ref = current;
+      if(annualBilling || (bumpActive() && PLANS[current].bump.type === "annual")) ref += "_annual";
+      if(bumpActive() && PLANS[current].bump.type === "onetime") ref += "_gift";
+      ref = ref.replace(/[^A-Za-z0-9_-]/g, "");
+      window.location.href = base + (base.indexOf('?') > -1 ? '&' : '?') +
+        'prefilled_email=' + encodeURIComponent(email) +
+        '&client_reference_id=' + encodeURIComponent(ref);
     }
     $('checkoutBtn').addEventListener('click', handleCheckout);
     $('stickyBtn').addEventListener('click', handleCheckout);
