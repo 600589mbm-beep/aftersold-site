@@ -3,14 +3,17 @@
  *
  * HTTP:
  *   POST /api/list      Accepts the order from list.html, stores it in D1.
+ *   POST /api/signup    Simple email/name signup (waitlist / early-access).
  *   GET  /api/health    Liveness check.
  *   POST /api/test-send Dry-run a DocuPost letter (add ?live=1 to actually mail).
+ *   GET  /api/promo     Enforceable per-IP launch discount.
+ *   GET  /admin         Token-protected HTML view of signups.
  *
  * Cron (daily): scans recipients and mails any card whose occasion lands today,
  * deduped via the `sends` table so each occasion goes out once per year.
  *
- * Secrets:  DOCUPOST_API_KEY  (wrangler secret put DOCUPOST_API_KEY)
- * Bindings: DB (D1), ALLOWED_ORIGIN (var)
+ * Secrets:  DOCUPOST_API_KEY, ADMIN_TOKEN
+ * Bindings: DB (D1), ALLOWED_ORIGIN (var — comma-separated list supported)
  */
 
 const DOCUPOST_URL = "https://app.docupost.com/api/1.1/wf/sendletter";
@@ -33,11 +36,17 @@ export default {
       if (url.pathname === "/api/list" && request.method === "POST") {
         return await handleList(request, env, cors);
       }
+      if (url.pathname === "/api/signup" && request.method === "POST") {
+        return await handleSignup(request, env, cors);
+      }
       if (url.pathname === "/api/test-send" && request.method === "POST") {
         return await handleTestSend(request, env, cors, url);
       }
       if (url.pathname === "/api/promo") {
         return await handlePromo(request, env, cors);
+      }
+      if (url.pathname === "/admin") {
+        return await handleAdmin(request, env);
       }
       return json({ error: "not found" }, 404, cors);
     } catch (err) {
@@ -87,6 +96,103 @@ async function handleList(request, env, cors) {
   return json({ ok: true, orderId, recipients: recipients.length }, 200, cors);
 }
 
+/* ───────────────────────── signup (waitlist / early access) ───────────────────────── */
+
+async function handleSignup(request, env, cors) {
+  const body = await request.json().catch(() => ({}));
+  const name = String(body.name || "").trim().slice(0, 100);
+  const email = String(body.email || "").trim().toLowerCase().slice(0, 200);
+  const source = String(body.source || "signin").trim().slice(0, 40);
+
+  if (!name) return json({ error: "name required" }, 400, cors);
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email))
+    return json({ error: "valid email required" }, 400, cors);
+
+  const now = Date.now();
+  try {
+    await env.DB.prepare(
+      "INSERT INTO users (name, email, source, created_at) VALUES (?, ?, ?, ?)"
+    ).bind(name, email, source, now).run();
+    return json({ ok: true, message: "signed up" }, 200, cors);
+  } catch (e) {
+    const msg = String(e && e.message || e);
+    if (/UNIQUE|constraint/i.test(msg)) {
+      return json({ ok: true, message: "already signed up", duplicate: true }, 200, cors);
+    }
+    throw e;
+  }
+}
+
+/* ───────────────────────── admin view (token-gated) ───────────────────────── */
+
+async function handleAdmin(request, env) {
+  const url = new URL(request.url);
+  const token = url.searchParams.get("token") || request.headers.get("X-Admin-Token") || "";
+  const expected = env.ADMIN_TOKEN || "";
+
+  if (!expected) {
+    return new Response("Admin not configured (missing ADMIN_TOKEN secret)", { status: 503 });
+  }
+  if (!token || token !== expected) {
+    return new Response("Unauthorized", { status: 401 });
+  }
+
+  const { results } = await env.DB.prepare(
+    "SELECT id, name, email, source, created_at FROM users ORDER BY created_at DESC LIMIT 500"
+  ).all();
+  const rows = (results || [])
+    .map((r) => {
+      const when = new Date(Number(r.created_at)).toISOString().replace("T", " ").slice(0, 19);
+      return `<tr>
+        <td>${r.id}</td>
+        <td>${escapeHtml(r.name)}</td>
+        <td>${escapeHtml(r.email)}</td>
+        <td>${escapeHtml(r.source || "")}</td>
+        <td>${when} UTC</td>
+      </tr>`;
+    })
+    .join("");
+
+  const count = (results || []).length;
+  const html = `<!doctype html><html><head>
+<meta charset="utf-8"><title>AfterSold — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  body { font-family: system-ui, -apple-system, sans-serif; margin: 0; background: #faf7f2; color: #21303f; }
+  header { padding: 24px 40px; border-bottom: 1px solid #e8e2d5; display: flex; align-items: center; justify-content: space-between; }
+  h1 { margin: 0; font-size: 22px; }
+  .count { color: #62707e; font-size: 14px; }
+  main { padding: 24px 40px; }
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 6px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+  th, td { padding: 12px 16px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px; }
+  th { background: #f6f2ea; color: #62707e; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #faf7f2; }
+  .empty { padding: 40px; text-align: center; color: #888; background: #fff; border-radius: 6px; }
+</style></head>
+<body>
+  <header>
+    <h1>AfterSold — Signups</h1>
+    <div class="count">${count} ${count === 1 ? "signup" : "signups"} (newest first, max 500)</div>
+  </header>
+  <main>
+    ${count > 0 ? `<table>
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Source</th><th>Created</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>` : `<div class="empty">No signups yet.</div>`}
+  </main>
+</body></html>`;
+
+  return new Response(html, {
+    status: 200,
+    headers: {
+      "Content-Type": "text/html; charset=utf-8",
+      "Cache-Control": "no-store",
+      "X-Robots-Tag": "noindex, nofollow",
+    },
+  });
+}
+
 /* ───────────────────────── daily cron ───────────────────────── */
 
 async function runDailySend(env) {
@@ -108,7 +214,6 @@ async function runDailySend(env) {
 
     const sender = safeParse(row.sender_json, {});
     for (const occ of occasions) {
-      // dedupe: one per occasion per recipient per year
       const exists = await env.DB.prepare(
         "SELECT 1 FROM sends WHERE recipient_id=? AND occasion=? AND year=?"
       ).bind(row.id, occ.key, year).first();
@@ -130,11 +235,10 @@ async function runDailySend(env) {
   return { sent, skipped, failed };
 }
 
-// Which cards are due today for this recipient, gated by their chosen categories.
 function occasionsFor(row, today) {
   const cats = safeParse(row.categories, []);
   const has = (c) => cats.includes(c);
-  const md = (iso) => (iso && iso.length >= 10) ? iso.slice(5, 10) : null; // MM-DD
+  const md = (iso) => (iso && iso.length >= 10) ? iso.slice(5, 10) : null;
   const out = [];
   if (md(row.birthday) === today && has("Birthday"))
     out.push({ key: "birthday", label: "Birthday" });
@@ -155,19 +259,16 @@ async function sendLetter(env, { recipient, sender, html }) {
   if (!key) throw new Error("DOCUPOST_API_KEY not configured");
 
   const form = new URLSearchParams();
-  // recipient
   form.set("to_name", clip(recipient.name, 40));
   form.set("to_address1", recipient.street || "");
   form.set("to_city", recipient.city || "");
   form.set("to_state", (recipient.state || "").toUpperCase().slice(0, 2));
   form.set("to_zip", (recipient.zip || "").slice(0, 5));
-  // return address
   form.set("from_name", clip(sender.name || "AfterSold", 40));
   form.set("from_address1", sender.address1 || "");
   form.set("from_city", sender.city || "");
   form.set("from_state", (sender.state || "").toUpperCase().slice(0, 2));
   form.set("from_zip", (sender.zip || "").slice(0, 5));
-  // options + content
   form.set("color", "true");
   form.set("doublesided", "false");
   form.set("description", clip("AfterSold card", 40));
@@ -183,7 +284,6 @@ async function sendLetter(env, { recipient, sender, html }) {
   return text;
 }
 
-// Dry-run by default so you can verify wiring without spending postage.
 async function handleTestSend(request, env, cors, url) {
   const body = await request.json().catch(() => ({}));
   const recipient = body.recipient || { name: "Test Recipient", street: "123 Main St", city: "Austin", state: "TX", zip: "78704" };
@@ -204,7 +304,6 @@ function firstName(n) { return (n || "").trim().split(/\s+/)[0] || "there"; }
 
 function messageFor(occ, row, sender) {
   const fn = firstName(row.name);
-  const warm = row.notes ? `` : ``;
   switch (occ.key) {
     case "birthday":
       return `Happy birthday, ${fn}! Hope your day is full of the people and things you love. Thinking of you today.`;
@@ -226,7 +325,6 @@ function renderCard(occ, row, sender) {
     ? `<img src="${row.signature}" alt="" style="height:54px;margin-top:6px" />`
     : `<div style="font-family:'Brush Script MT',cursive;font-size:30px;color:#21303f;margin-top:6px">${signName}</div>`;
 
-  // Inline-styled, kept well under DocuPost's 9000-char html limit.
   return `<!doctype html><html><head><meta charset="utf-8"></head>
 <body style="margin:0;font-family:Georgia,'Times New Roman',serif;color:#21303f">
   <div style="max-width:640px;margin:120px auto 0;padding:0 60px;text-align:center">
@@ -238,15 +336,11 @@ function renderCard(occ, row, sender) {
 </body></html>`;
 }
 
-/* ───────────────────────── launch promo (one-time 50% off, per-IP) ───────────────────────── */
+/* ───────────────────────── launch promo ───────────────────────── */
 
-const PROMO_WINDOW_MS = 2 * 60 * 1000;             // each visitor gets ONE 2-minute window
-const PROMO_LOCKOUT_MS = 60 * 24 * 60 * 60 * 1000; // then that IP can't get it again for 60 days
+const PROMO_WINDOW_MS = 2 * 60 * 1000;
+const PROMO_LOCKOUT_MS = 60 * 24 * 60 * 60 * 1000;
 
-// GET /api/promo — real, enforceable launch discount. The visitor's IP is stored
-// only as a salted SHA-256 hash (no raw IP retained). Refreshing does NOT reset the
-// clock; once the 2-minute window passes, the IP is locked out of the discount for 60
-// days. Returns { eligible, msLeft } — msLeft is the time remaining in their window.
 async function handlePromo(request, env, cors) {
   const ip = request.headers.get("CF-Connecting-IP")
     || (request.headers.get("X-Forwarded-For") || "").split(",")[0].trim()
@@ -259,7 +353,7 @@ async function handlePromo(request, env, cors) {
   ).bind(ipHash).first();
 
   let eligible, deadline;
-  if (!row) {                                       // first time this IP sees the offer
+  if (!row) {
     deadline = now + PROMO_WINDOW_MS;
     await env.DB.prepare(
       "INSERT INTO promo_offers (ip_hash, first_seen, deadline) VALUES (?,?,?)"
@@ -267,11 +361,11 @@ async function handlePromo(request, env, cors) {
     eligible = true;
   } else {
     const firstSeen = Number(row.first_seen), dl = Number(row.deadline);
-    if (now < dl) {                                 // still inside their original window
+    if (now < dl) {
       eligible = true; deadline = dl;
-    } else if (now < firstSeen + PROMO_LOCKOUT_MS) { // window passed → locked 60 days
+    } else if (now < firstSeen + PROMO_LOCKOUT_MS) {
       eligible = false; deadline = dl;
-    } else {                                        // 60 days elapsed → grant a fresh window
+    } else {
       deadline = now + PROMO_WINDOW_MS;
       await env.DB.prepare(
         "UPDATE promo_offers SET first_seen = ?, deadline = ? WHERE ip_hash = ?"
@@ -289,10 +383,13 @@ async function sha256(s) {
 
 /* ───────────────────────── helpers ───────────────────────── */
 
+// CORS supports comma-separated origins: env.ALLOWED_ORIGIN = "https://a.com,https://b.com"
 function corsHeaders(env, request) {
   const origin = request.headers.get("Origin") || "";
-  const allow = env.ALLOWED_ORIGIN || "*";
-  const allowed = allow === "*" || origin === allow ? (allow === "*" ? "*" : origin) : allow;
+  const raw = env.ALLOWED_ORIGIN || "*";
+  const list = raw.split(",").map((s) => s.trim()).filter(Boolean);
+  const allowAll = list.includes("*");
+  const allowed = allowAll ? "*" : (list.includes(origin) ? origin : (list[0] || "*"));
   return {
     "Access-Control-Allow-Origin": allowed,
     "Access-Control-Allow-Methods": "POST, GET, OPTIONS",
