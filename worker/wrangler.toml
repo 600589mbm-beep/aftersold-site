@@ -16,7 +16,8 @@ database_name = "aftersold"
 database_id = "2f1b7300-daed-4ba1-9c9f-e01a0cbd27ab"
 
 [vars]
-# Origin allowed to POST the list (your GitHub Pages site). Not a secret.
-ALLOWED_ORIGIN = "https://600589mbm-beep.github.io"
-# Set DOCUPOST_API_KEY as a SECRET, never here:
-#   wrangler secret put DOCUPOST_API_KEY
+# Origins allowed to POST — comma-separated, worker parses the list.
+ALLOWED_ORIGIN = "https://getaftersold.com,https://600589mbm-beep.github.io,https://www.getaftersold.com"
+# Secrets (set via `wrangler secret put NAME` or the Cloudflare dashboard):
+#   DOCUPOST_API_KEY   — DocuPost API token
+#   ADMIN_TOKEN        — token required to view /admin
