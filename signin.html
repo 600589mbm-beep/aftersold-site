@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign in — AfterSold</title>
+  <meta name="description" content="Sign in for early access to AfterSold — handwritten client-retention cards for real estate agents.">
+  <link rel="icon" href="og-image.png">
+  <style>
+    :root {
+      --brand: #21303f;
+      --accent: #C0392B;
+      --muted: #62707e;
+      --bg: #faf7f2;
+      --card: #ffffff;
+      --border: #e8e2d5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--bg);
+      color: var(--brand);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+    }
+    header a { color: var(--brand); text-decoration: none; font-weight: bold; font-size: 20px; letter-spacing: 1px; }
+    main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; }
+    .card {
+      background: var(--card);
+      padding: 48px 44px;
+      border-radius: 8px;
+      box-shadow: 0 4px 24px rgba(33, 48, 63, 0.08);
+      max-width: 440px;
+      width: 100%;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+    .sub {
+      color: var(--muted);
+      margin: 0 0 32px;
+      font-size: 15px;
+    }
+    label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 20px 0 6px;
+      font-family: system-ui, sans-serif;
+      font-weight: 600;
+    }
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+      font-family: inherit;
+      background: #fff;
+    }
+    input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(192, 57, 43, 0.1);
+    }
+    button {
+      margin-top: 28px;
+      width: 100%;
+      padding: 14px;
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: system-ui, sans-serif;
+      cursor: pointer;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    button:hover:not(:disabled) { background: #1a252f; }
+    button:disabled { background: #aaa; cursor: not-allowed; }
+    .msg {
+      margin-top: 20px;
+      padding: 12px 14px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-family: system-ui, sans-serif;
+    }
+    .msg.ok { background: #e8f5e9; color: #2e7d32; }
+    .msg.err { background: #ffebee; color: #c62828; }
+    .foot {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--muted);
+      font-family: system-ui, sans-serif;
+    }
+    .foot a { color: var(--brand); }
+    footer { padding: 20px; text-align: center; color: var(--muted); font-size: 12px; font-family: system-ui, sans-serif; }
+  </style>
+</head>
+<body>
+  <header><a href="/">AfterSold</a></header>
+  <main>
+    <div class="card">
+      <h1>Sign in</h1>
+      <p class="sub">Get early access to AfterSold — handwritten client-retention cards, sent for you.</p>
+      <form id="f" novalidate>
+        <label for="name">Your name</label>
+        <input id="name" name="name" type="text" required autocomplete="name" placeholder="Jane Smith">
+        <label for="email">Email address</label>
+        <input id="email" name="email" type="email" required autocomplete="email" placeholder="jane@brokerage.com">
+        <button id="btn" type="submit">Sign in</button>
+      </form>
+      <div id="msg" class="msg" style="display:none" role="status" aria-live="polite"></div>
+      <div class="foot">Already signed up? Just enter the same email.</div>
+    </div>
+  </main>
+  <footer>&copy; AfterSold &nbsp;·&nbsp; <a href="/privacy.html" style="color:inherit">Privacy</a> &nbsp;·&nbsp; <a href="/terms.html" style="color:inherit">Terms</a></footer>
+  <script>
+    (function () {
+      var API = "https://aftersold-site.dakota-valley-haul-600589.workers.dev";
+      var f = document.getElementById("f");
+      var msg = document.getElementById("msg");
+      var btn = document.getElementById("btn");
+
+      function show(text, ok) {
+        msg.textContent = text;
+        msg.className = "msg " + (ok ? "ok" : "err");
+        msg.style.display = "block";
+      }
+
+      f.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        var name = document.getElementById("name").value.trim();
+        var email = document.getElementById("email").value.trim();
+        if (!name) { show("Please enter your name.", false); return; }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { show("Please enter a valid email.", false); return; }
+        btn.disabled = true;
+        btn.textContent = "Signing in…";
+        msg.style.display = "none";
+        try {
+          var r = await fetch(API + "/api/signup", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: name, email: email, source: "signin" })
+          });
+          var data = await r.json();
+          if (r.ok) {
+            if (data.duplicate) {
+              show("Welcome back — you're already on the list.", true);
+            } else {
+              show("Thanks! You're on the list. We'll be in touch.", true);
+              f.reset();
+            }
+          } else {
+            show(data.error || "Something went wrong. Try again.", false);
+          }
+        } catch (err) {
+          show("Network error. Please try again.", false);
+        }
+        btn.disabled = false;
+        btn.textContent = "Sign in";
+      });
+    })();
+  </script>
+</body>
+</html>
